@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "text": "Want to double your email open rates without spending more on ads?",
+    "niche": "marketing",
+    "tone": "curious",
+    "length": "medium"
+  },
+  {
+    "id": 2,
+    "text": "I lost 30 pounds in 90 days using this weird morning ritual...",
+    "niche": "health",
+    "tone": "intriguing",
+    "length": "medium"
+  },
+  {
+    "id": 3,
+    "text": "STOP losing money on Facebook ads! Here's what the pros don't want you to know...",
+    "niche": "marketing",
+    "tone": "urgent",
+    "length": "long"
+  },
+  {
+    "id": 4,
+    "text": "The only 3 exercises you need for complete body transformation",
+    "niche": "fitness",
+    "tone": "authoritative",
+    "length": "medium"
+  },
+  {
+    "id": 5,
+    "text": "Why most personal finance advice is dead wrong (and what to do instead)",
+    "niche": "finance",
+    "tone": "contrarian",
+    "length": "long"
+  }
+] 

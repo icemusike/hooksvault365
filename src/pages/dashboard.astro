@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HookVault from '../components/HookVault.jsx';
+import '../styles/hooks.css';
+
+// Import hooks data directly
+import hooksData from '../../public/hooks.json';
+const hooks = hooksData;
+---
+
+<Layout title="HookVault365 - Dashboard" activeNav="hooks">
+	<div class="hooks-container">
+		<div class="hooks-header">
+			<h2>Hook Collection Dashboard</h2>
+			<p>Search, filter, and generate pattern interrupt hooks</p>
+		</div>
+		
+		<HookVault client:load initialHooks={hooks} />
+	</div>
+</Layout>
+
+<script>
+	// Add a backup timeout in case hooks don't load
+	document.addEventListener('DOMContentLoaded', () => {
+		const hookListTimeout = setTimeout(() => {
+			const loadingElements = document.querySelectorAll('.loading-state');
+			loadingElements.forEach(el => {
+				// Check if loading state is still visible after timeout
+				if (el.offsetParent !== null) {
+					el.innerHTML = `
+						<i class="fas fa-clock fa-3x"></i>
+						<p>Loading is taking longer than expected. Please refresh the page or check your connection.</p>
+						<button onclick="window.location.reload()" class="reload-btn">
+							<i class="fas fa-sync-alt"></i> Refresh Page
+						</button>
+					`;
+				}
+			});
+		}, 10000); // 10 seconds
+		
+		// Clean up timeout if page changes
+		window.addEventListener('beforeunload', () => {
+			clearTimeout(hookListTimeout);
+		});
+	});
+</script>
+
+<style>
+	.hooks-container {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+	
+	.hooks-header {
+		margin-bottom: 2rem;
+	}
+	
+	.hooks-header h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 0.5rem;
+		color: var(--text-primary);
+	}
+	
+	.hooks-header p {
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+	}
+	
+	.reload-btn {
+		margin-top: 1rem;
+		background-color: rgb(var(--accent));
+		color: white;
+		border: none;
+		border-radius: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		font-weight: 500;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: background-color 0.2s;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	
+	.reload-btn:hover {
+		background-color: rgb(var(--accent-dark));
+	}
+</style> 

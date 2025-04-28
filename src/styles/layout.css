@@ -1,0 +1,79 @@
+.layout {
+  /* ... existing styles ... */
+}
+
+.header {
+  /* ... existing styles ... */
+}
+
+.logo a {
+  /* ... existing styles ... */
+}
+
+.logo .logo-text {
+  /* ... existing styles ... */
+}
+
+.nav-links {
+  /* ... existing styles ... */
+}
+
+.nav-links a {
+  /* ... existing styles ... */
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: rgb(var(--accent)); /* Use new accent color for active/hover */
+}
+
+.user-menu {
+  /* ... existing styles ... */
+}
+
+.user-avatar {
+  /* ... existing styles ... */
+}
+
+.dropdown-menu {
+  /* ... existing styles ... */
+}
+
+.dropdown-menu a:hover {
+  background-color: rgba(var(--accent), 0.08); /* Subtle accent hover */
+}
+
+.main-content {
+  /* ... existing styles ... */
+}
+
+.sidebar {
+  /* ... existing styles ... */
+}
+
+.sidebar-nav a {
+  /* ... existing styles ... */
+}
+
+.sidebar-nav a.active {
+  background-color: rgba(var(--accent), 0.1); /* Use accent background */
+  color: rgb(var(--accent)); /* Use accent text */
+  font-weight: 600;
+}
+
+.sidebar-nav a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: rgb(var(--accent)); /* Accent indicator bar */
+  border-radius: 0 3px 3px 0;
+}
+
+.sidebar-nav a:hover:not(.active) {
+  background-color: rgba(var(--accent), 0.05);
+}
+
+/* ... other styles ... */ 

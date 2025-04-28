@@ -1,0 +1,463 @@
+---
+import NotificationSystem from '../components/NotificationSystem.jsx';
+import '../styles/global.css';
+import { THEMES } from '../utils/themeUtils';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="HookVault365 - Pattern Interrupt Swipe Files">
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		
+		<!-- Theme initialization script -->
+		<script is:inline>
+			// Theme initialization
+			(function() {
+				// Check if user wants to remember theme preference
+				const rememberTheme = localStorage.getItem('remember_theme') !== 'false';
+				
+				// Check if we have a theme from previous navigation
+				const lastActiveTheme = sessionStorage.getItem('last_active_theme');
+				
+				let theme;
+				if (lastActiveTheme && !rememberTheme) {
+					// Use the theme from the previous page without saving
+					theme = lastActiveTheme;
+				} else if (rememberTheme) {
+					// Use the saved theme
+					theme = localStorage.getItem('app_theme') || 'light';
+				} else {
+					// Default to light
+					theme = 'light';
+				}
+				
+				// Determine actual theme if system preference
+				if (theme === 'system') {
+					theme = window.matchMedia('(prefers-color-scheme: dark)').matches 
+						? 'dark' 
+						: 'light';
+				}
+				
+				// Apply theme class to document
+				document.documentElement.classList.remove('light', 'dark');
+				document.documentElement.classList.add(theme);
+				
+				// Apply CSS variables based on theme
+				const themeVars = {
+					'light': {
+						'--bg-primary': '#ffffff',
+						'--bg-secondary': '#f7f7f7',
+						'--text-primary': '#1a1a1a',
+						'--text-secondary': '#5c5c5c',
+						'--border-color': '#e0e0e0',
+						'--accent': '195, 27, 27',
+						'--accent-dark': '166, 22, 22',
+						'--accent-light': '249, 224, 224',
+						'--accent-text': '255, 255, 255',
+						'--accent-gradient': 'linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-dark)) 30%, rgb(var(--accent-light)) 60%)',
+						'--success': '#10b981',
+						'--error': '#ef4444',
+						'--warning': '#f59e0b',
+						'--info': '#3b82f6',
+						'--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
+						'--input-bg': '#f9fafb'
+					},
+					'dark': {
+						'--bg-primary': '#121212',
+						'--bg-secondary': '#212121',
+						'--text-primary': '#ffffff',
+						'--text-secondary': '#aaaaaa',
+						'--border-color': '#303030',
+						'--accent': '230, 33, 23',
+						'--accent-light': '255, 120, 110',
+						'--accent-dark': '180, 27, 18',
+						'--accent-text': '255, 255, 255',
+						'--accent-gradient': 'linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-light)) 30%, #303030 60%)',
+						'--success': '#34d399',
+						'--error': '#f87171',
+						'--warning': '#fbbf24',
+						'--info': '#60a5fa',
+						'--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.35), 0 2px 4px -1px rgba(0, 0, 0, 0.25)',
+						'--input-bg': '#1e1e1e'
+					}
+				};
+				
+				// Apply CSS variables
+				const activeThemeVars = themeVars[theme];
+				for (const [property, value] of Object.entries(activeThemeVars)) {
+					document.documentElement.style.setProperty(property, value);
+				}
+			})();
+		</script>
+	</head>
+	<body>
+		<div class="auth-container">
+			<div class="auth-layout">
+				<div class="auth-visual">
+					<div class="brand">
+						<div class="logo">
+							<i class="fas fa-book"></i>
+						</div>
+						<h1>HookVault365</h1>
+					</div>
+					<div class="visual-content">
+						<div class="illustration">
+							<img src="/auth-illustration.svg" alt="Authentication" />
+						</div>
+						<div class="tagline">
+							<h2>Unlock the Power of Pattern Interrupts</h2>
+							<p>The ultimate collection of marketing hooks to boost engagement, increase conversions, and drive sales.</p>
+						</div>
+						<div class="testimonial">
+							<div class="quote">
+								<i class="fas fa-quote-left"></i>
+								<p>"HookVault365 has transformed our marketing copy. Our engagement rates have increased by 37% since we started using their pattern interrupts."</p>
+							</div>
+							<div class="author">
+								<div class="avatar">
+									<i class="fas fa-user-circle"></i>
+								</div>
+								<div class="author-info">
+									<p class="name">Sarah Johnson</p>
+									<p class="role">Marketing Director, TechScale Inc.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="auth-form-container">
+					<div class="auth-form-wrapper">
+						<main class="auth-content">
+							<slot />
+						</main>
+						<div class="auth-footer">
+							<p>&copy; 2025 HookVault365. All rights reserved.</p>
+							<div class="footer-links">
+								<a href="#">Privacy Policy</a>
+								<span class="divider">•</span>
+								<a href="#">Terms of Service</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Notification System -->
+		<NotificationSystem client:load />
+	</body>
+</html>
+
+<script>
+  // Theme is now handled by inline script in head
+  
+  // Page transition theme handling
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add listeners to all internal links to ensure theme consistency
+    document.querySelectorAll('a[href^="/"]').forEach(link => {
+      link.addEventListener('click', () => {
+        // Store current theme in sessionStorage before navigation
+        const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        sessionStorage.setItem('last_active_theme', currentTheme);
+      });
+    });
+  });
+</script>
+
+<style>
+	:root {
+		--auth-primary: #6366f1;
+		--auth-primary-dark: #4f46e5;
+		--auth-primary-light: #818cf8;
+		--auth-text-light: #f8fafc;
+		--auth-text-dark: #1e293b;
+		--auth-text-muted: #64748b;
+		--auth-bg-light: #f8fafc;
+		--auth-bg-dark: #0f172a;
+		--auth-border: #e2e8f0;
+		--auth-card-bg-light: #ffffff;
+		--auth-card-bg-dark: #1e293b;
+		--auth-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+		--font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	}
+
+	body {
+		font-family: var(--font-family);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+	
+	.auth-container {
+		min-height: 100vh;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+		padding: 20px;
+	}
+	
+	.auth-layout {
+		display: flex;
+		width: 100%;
+		max-width: 1100px;
+		min-height: 550px;
+		height: auto;
+		max-height: calc(100vh - 40px);
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+	}
+	
+	.auth-visual {
+		display: flex;
+		flex-direction: column;
+		width: 45%;
+		background: linear-gradient(135deg, var(--auth-primary), var(--auth-primary-dark));
+		color: var(--auth-text-light);
+		padding: 2rem;
+	}
+	
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 2rem;
+	}
+	
+	.logo {
+		width: 40px;
+		height: 40px;
+		border-radius: 10px;
+		background-color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--primary-color);
+		font-size: 1.25rem;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	}
+	
+	.brand h1 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin: 0;
+	}
+	
+	.visual-content {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 100%;
+	}
+	
+	.illustration {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 2rem;
+	}
+	
+	.illustration img {
+		max-width: 100%;
+		height: auto;
+		max-height: 300px;
+	}
+	
+	.tagline {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+	
+	.tagline h2 {
+		font-size: 1.75rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+	}
+	
+	.tagline p {
+		font-size: 1rem;
+		opacity: 0.9;
+		line-height: 1.6;
+		max-width: 85%;
+		margin: 0 auto;
+	}
+	
+	.testimonial {
+		background-color: rgba(255, 255, 255, 0.1);
+		border-radius: 12px;
+		padding: 1.5rem;
+		margin-top: auto;
+	}
+	
+	.quote {
+		margin-bottom: 1rem;
+		position: relative;
+	}
+	
+	.quote i {
+		font-size: 1.5rem;
+		opacity: 0.3;
+		position: absolute;
+		top: -0.5rem;
+		left: -0.5rem;
+	}
+	
+	.quote p {
+		font-size: 0.95rem;
+		line-height: 1.6;
+		margin: 0;
+		padding-left: 1rem;
+	}
+	
+	.author {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+	
+	.avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background-color: rgba(255, 255, 255, 0.2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 1.25rem;
+	}
+	
+	.author-info p {
+		margin: 0;
+	}
+	
+	.author-info .name {
+		font-weight: 600;
+		font-size: 0.9rem;
+	}
+	
+	.author-info .role {
+		font-size: 0.8rem;
+		opacity: 0.7;
+	}
+	
+	.auth-form-container {
+		width: 55%;
+		background-color: var(--bg-secondary);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 2rem;
+		overflow-y: auto;
+	}
+	
+	.auth-form-wrapper {
+		width: 100%;
+		max-width: 450px;
+		display: flex;
+		flex-direction: column;
+		min-height: 100%;
+	}
+	
+	.auth-content {
+		flex: 1;
+	}
+	
+	.auth-footer {
+		margin-top: 2rem;
+		text-align: center;
+		color: var(--text-secondary);
+		font-size: 0.85rem;
+	}
+	
+	.auth-footer p {
+		margin-bottom: 0.5rem;
+	}
+	
+	.footer-links {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+	}
+	
+	.footer-links a {
+		color: var(--primary-color);
+		text-decoration: none;
+	}
+	
+	.footer-links a:hover {
+		text-decoration: underline;
+	}
+	
+	.divider {
+		color: var(--border-color);
+	}
+	
+	/* Responsive adjustments */
+	@media (max-width: 992px) {
+		.auth-layout {
+			flex-direction: column;
+			max-height: none;
+			height: auto;
+		}
+		
+		.auth-visual, .auth-form-container {
+			width: 100%;
+		}
+		
+		.auth-visual {
+			padding: 2rem;
+		}
+		
+		.visual-content {
+			height: auto;
+		}
+		
+		.illustration img {
+			max-height: 200px;
+		}
+		
+		.testimonial {
+			margin-top: 2rem;
+		}
+	}
+	
+	@media (max-width: 576px) {
+		.auth-visual {
+			padding: 1.5rem;
+		}
+		
+		.auth-form-container {
+			padding: 1.5rem;
+		}
+		
+		.brand {
+			margin-bottom: 1.5rem;
+		}
+		
+		.tagline h2 {
+			font-size: 1.5rem;
+		}
+		
+		.illustration {
+			display: none;
+		}
+	}
+</style> 

@@ -1,0 +1,195 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HookList from '../components/HookList.jsx';
+import '../styles/hooks.css';
+---
+
+<Layout title="HookVault365 - Favorites" activeNav="favorites">
+  <div class="favorites-container">
+    <div class="favorites-header">
+      <h2>Your Favorite Hooks</h2>
+      <p>Hooks you've saved for quick access</p>
+    </div>
+    
+    <div id="favorites-content" class="favorites-content">
+      <!-- Favorites will be loaded here via JavaScript -->
+      <div class="loading-state">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading your favorites...</p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .favorites-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .favorites-header {
+    margin-bottom: 2rem;
+  }
+  
+  .favorites-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  
+  .favorites-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  
+  .favorites-content {
+    min-height: 300px;
+  }
+  
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+    gap: 1rem;
+  }
+  
+  .no-favorites {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    box-shadow: var(--card-shadow);
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .no-favorites h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin: 0.5rem 0 0;
+  }
+  
+  .no-favorites p {
+    margin: 0;
+    opacity: 0.8;
+    max-width: 400px;
+  }
+  
+  .browse-hooks-btn {
+    margin-top: 1rem;
+    background-color: rgb(var(--accent));
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  
+  .browse-hooks-btn:hover {
+    background-color: rgb(var(--accent-dark));
+  }
+</style>
+
+<script>
+  import HookList from '../components/HookList.jsx';
+  import React from 'react';
+  import ReactDOM from 'react-dom/client';
+  import { loadFavorites } from '../utils/hookStorage';
+  import { showError } from '../utils/notificationUtils';
+  
+  // Load favorites from IndexedDB
+  const loadFavoritesData = async () => {
+    const favoritesContent = document.getElementById('favorites-content');
+    if (!favoritesContent) return;
+    
+    try {
+      // Set up a timeout for loading favorites
+      const loadPromise = loadFavorites();
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => {
+          console.warn('Favorites loading timed out');
+          resolve(null);
+        }, 5000); // 5 second timeout
+      });
+      
+      // Use whichever resolves first
+      const favorites = await Promise.race([loadPromise, timeoutPromise]);
+      
+      if (!favorites || favorites.length === 0) {
+        // Show empty state
+        favoritesContent.innerHTML = `
+          <div class="no-favorites">
+            <i class="fas fa-star fa-3x"></i>
+            <h3>No favorites yet</h3>
+            <p>Start adding hooks to your favorites by clicking the star icon on hooks you want to save for later.</p>
+            <a href="/dashboard" class="browse-hooks-btn">
+              <i class="fas fa-search"></i> Browse Hooks
+            </a>
+          </div>
+        `;
+      } else {
+        // Render favorites
+        const hookListContainer = document.createElement('div');
+        favoritesContent.innerHTML = '';
+        favoritesContent.appendChild(hookListContainer);
+        
+        const root = ReactDOM.createRoot(hookListContainer);
+        root.render(React.createElement(HookList, { hooks: favorites }));
+      }
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+      
+      // Show error state
+      favoritesContent.innerHTML = `
+        <div class="no-favorites">
+          <i class="fas fa-exclamation-circle fa-3x"></i>
+          <h3>Error loading favorites</h3>
+          <p>There was a problem loading your favorite hooks. Please try again later.</p>
+          <a href="/dashboard" class="browse-hooks-btn">
+            <i class="fas fa-home"></i> Go to Dashboard
+          </a>
+        </div>
+      `;
+    }
+  };
+
+  // Load favorites with timeout when the DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set a timeout in case loadFavoritesData hangs
+    const loadTimeout = setTimeout(() => {
+      const favoritesContent = document.getElementById('favorites-content');
+      if (favoritesContent && favoritesContent.querySelector('.loading-state')) {
+        // If still in loading state after timeout, show error
+        favoritesContent.innerHTML = `
+          <div class="no-favorites">
+            <i class="fas fa-clock fa-3x"></i>
+            <h3>Loading took too long</h3>
+            <p>We couldn't load your favorites in a reasonable time. Please check your internet connection and try again.</p>
+            <a href="/dashboard" class="browse-hooks-btn">
+              <i class="fas fa-home"></i> Go to Dashboard
+            </a>
+          </div>
+        `;
+      }
+    }, 8000); // 8 second overall timeout
+    
+    // Start loading
+    loadFavoritesData().finally(() => {
+      clearTimeout(loadTimeout);
+    });
+  });
+</script> 

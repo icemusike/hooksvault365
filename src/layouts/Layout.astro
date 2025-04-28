@@ -1,0 +1,402 @@
+---
+import NotificationSystem from '../components/NotificationSystem.jsx';
+import '../styles/global.css';
+import { initializeTheme, setTheme, THEMES } from '../utils/themeUtils';
+
+interface Props {
+	title: string;
+	activeNav?: string;
+}
+
+const { title, activeNav = "hooks" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="HookVault365 - Pattern Interrupt Swipe Files">
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		
+		<!-- Theme initialization script -->
+		<script is:inline>
+			// Theme initialization
+			(function() {
+				// Check if user wants to remember theme preference
+				const rememberTheme = localStorage.getItem('remember_theme') !== 'false';
+				
+				// Check if we have a theme from previous navigation
+				const lastActiveTheme = sessionStorage.getItem('last_active_theme');
+				
+				let theme;
+				if (lastActiveTheme && !rememberTheme) {
+					// Use the theme from the previous page without saving
+					theme = lastActiveTheme;
+				} else if (rememberTheme) {
+					// Use the saved theme
+					theme = localStorage.getItem('app_theme') || 'light';
+				} else {
+					// Default to light
+					theme = 'light';
+				}
+				
+				// Determine actual theme if system preference
+				if (theme === 'system') {
+					theme = window.matchMedia('(prefers-color-scheme: dark)').matches 
+						? 'dark' 
+						: 'light';
+				}
+				
+				// Apply theme class to document
+				document.documentElement.classList.remove('light', 'dark');
+				document.documentElement.classList.add(theme);
+				
+				// Apply CSS variables based on theme
+				const themeVars = {
+					'light': {
+						'--bg-primary': '#ffffff',
+						'--bg-secondary': '#f7f7f7',
+						'--text-primary': '#1a1a1a',
+						'--text-secondary': '#5c5c5c',
+						'--border-color': '#e0e0e0',
+						'--accent': '195, 27, 27',
+						'--accent-dark': '166, 22, 22',
+						'--accent-light': '249, 224, 224',
+						'--accent-text': '255, 255, 255',
+						'--accent-gradient': 'linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-dark)) 30%, rgb(var(--accent-light)) 60%)',
+						'--success': '#10b981',
+						'--error': '#ef4444',
+						'--warning': '#f59e0b',
+						'--info': '#3b82f6',
+						'--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
+						'--input-bg': '#f9fafb'
+					},
+					'dark': {
+						'--bg-primary': '#121212',
+						'--bg-secondary': '#212121',
+						'--text-primary': '#ffffff',
+						'--text-secondary': '#aaaaaa',
+						'--border-color': '#303030',
+						'--accent': '230, 33, 23',
+						'--accent-light': '255, 120, 110',
+						'--accent-dark': '180, 27, 18',
+						'--accent-text': '255, 255, 255',
+						'--accent-gradient': 'linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-light)) 30%, #303030 60%)',
+						'--success': '#34d399',
+						'--error': '#f87171',
+						'--warning': '#fbbf24',
+						'--info': '#60a5fa',
+						'--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.35), 0 2px 4px -1px rgba(0, 0, 0, 0.25)',
+						'--input-bg': '#1e1e1e'
+					}
+				};
+				
+				// Apply CSS variables
+				const activeThemeVars = themeVars[theme];
+				for (const [property, value] of Object.entries(activeThemeVars)) {
+					document.documentElement.style.setProperty(property, value);
+				}
+			})();
+		</script>
+	</head>
+	<body>
+		<div class="app-container">
+			<aside class="sidebar">
+				<div class="sidebar-header">
+					<div class="logo">
+						<h2>HookVault365</h2>
+					</div>
+				</div>
+				<nav class="sidebar-nav">
+					<a href="/dashboard" class={activeNav === "hooks" ? "active" : ""}>
+						<i class="fas fa-book"></i>
+						<span>Hooks</span>
+					</a>
+					<a href="/favorites" class={activeNav === "favorites" ? "active" : ""}>
+						<i class="fas fa-star"></i>
+						<span>Favorites</span>
+					</a>
+					<a href="/settings" class={activeNav === "settings" ? "active" : ""}>
+						<i class="fas fa-cog"></i>
+						<span>Settings</span>
+					</a>
+				</nav>
+				<div class="sidebar-footer">
+					<p>v1.0.0</p>
+				</div>
+			</aside>
+			<div class="main-content">
+				<header class="top-header">
+					<div class="page-title">
+						{activeNav === "hooks" && <h1>Hook Vault</h1>}
+						{activeNav === "favorites" && <h1>Favorites</h1>}
+						{activeNav === "settings" && <h1>Settings</h1>}
+					</div>
+					<div class="user-controls">
+						<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+							<i class="fas fa-moon"></i>
+						</button>
+						<div class="user-profile" id="user-profile">
+							<button class="user-button" id="user-button">
+								<i class="fas fa-user-circle"></i>
+								<span id="user-name">Guest</span>
+							</button>
+							<div class="user-dropdown" id="user-dropdown">
+								<a href="/settings">Profile</a>
+								<button id="logout-button">Logout</button>
+							</div>
+						</div>
+					</div>
+				</header>
+				<main class="content">
+					<slot />
+				</main>
+			</div>
+		</div>
+		
+		<!-- Notification System -->
+		<NotificationSystem client:load />
+	</body>
+</html>
+
+<script>
+  import { toggleTheme, getCurrentTheme, THEMES } from '../utils/themeUtils';
+  import { getSession, logoutUser } from '../utils/authUtils';
+  
+  // Page transition theme handling
+  document.addEventListener('DOMContentLoaded', () => {
+    // Store theme preference setting in sessionStorage for navigation
+    const rememberTheme = localStorage.getItem('remember_theme') !== 'false';
+    sessionStorage.setItem('last_theme_remember_setting', rememberTheme);
+    
+    // Add listeners to all internal links to ensure theme consistency
+    document.querySelectorAll('a[href^="/"]').forEach(link => {
+      link.addEventListener('click', () => {
+        // Store current theme in sessionStorage before navigation
+        const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        sessionStorage.setItem('last_active_theme', currentTheme);
+      });
+    });
+  });
+  
+  // Update theme toggle icon
+  function updateThemeToggleIcon() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+    
+    const currentTheme = getCurrentTheme();
+    const iconElement = themeToggle.querySelector('i');
+    
+    // Remove all possible icon classes
+    if (iconElement) {
+      iconElement.className = '';
+      
+      if (currentTheme === THEMES.DARK) {
+        iconElement.className = 'fas fa-sun'; // Sun icon for dark mode (switch to light)
+      } else {
+        iconElement.className = 'fas fa-moon'; // Moon icon for light mode (switch to dark)
+      }
+    }
+  }
+  
+  // Initialize authentication and UI on page load
+  document.addEventListener('DOMContentLoaded', async () => {
+    updateThemeToggleIcon(); // Update theme toggle icon
+
+    const currentPath = window.location.pathname;
+    const publicPaths = ['/login', '/landing', '/signup'];
+    
+    try {
+      // Use refactored getSession which includes profile data
+      const session = await getSession(); 
+      console.log('Layout.astro - Session Check Result:', session);
+
+      // Redirects based on session status and path
+      if (session?.isLoggedIn && currentPath === '/login') {
+        console.log('Already logged in on login page, redirecting...');
+        window.location.replace('/dashboard');
+        return;
+      }
+      if (!session?.isLoggedIn && !publicPaths.includes(currentPath)) {
+        console.log('Not logged in on protected page, redirecting...');
+        window.location.replace('/login');
+        return;
+      }
+
+      // Setup user UI if logged in
+      const userNameElement = document.getElementById('user-name');
+      const userProfileElement = document.getElementById('user-profile');
+      if (session?.isLoggedIn) {
+        console.log('User authenticated in layout:', session.name); 
+        if (userNameElement) {
+          // Use the name directly from the session object
+          userNameElement.textContent = session.name || 'User'; 
+        }
+        if (userProfileElement) {
+          userProfileElement.classList.add('logged-in');
+        }
+      } else {
+         console.log('User not authenticated in layout.');
+         if (userNameElement) userNameElement.textContent = 'Guest';
+         if (userProfileElement) userProfileElement.classList.remove('logged-in');
+      }
+
+    } catch (error) {
+      console.error('Layout Auth Check Error:', error);
+      // Basic fallback redirect on error
+      if (!publicPaths.includes(currentPath)) {
+        window.location.replace('/login');
+      }
+    }
+  });
+  
+  // Set up theme toggle button
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const newTheme = toggleTheme();
+    updateThemeToggleIcon();
+  });
+  
+  // User dropdown toggle
+  document.getElementById('user-button')?.addEventListener('click', () => {
+    const dropdown = document.getElementById('user-dropdown');
+    if (dropdown) {
+      dropdown.classList.toggle('active');
+    }
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const userButton = document.getElementById('user-button');
+    const dropdown = document.getElementById('user-dropdown');
+    
+    if (dropdown && userButton && !userButton.contains(e.target)) {
+      dropdown.classList.remove('active');
+    }
+  });
+  
+  // Logout functionality
+  document.getElementById('logout-button')?.addEventListener('click', () => {
+    logoutUser();
+  });
+</script> 
+
+<style>
+	/* Add user-controls styling */
+	.user-controls {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem; /* Add space between buttons */
+	}
+	
+	.theme-toggle {
+		/* Ensure theme toggle has consistent size */
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: none;
+		border: 1px solid transparent;
+		color: var(--text-secondary);
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	
+	.theme-toggle:hover {
+		background-color: var(--hover-bg);
+		color: var(--text-primary);
+		border-color: var(--border-color);
+		transform: scale(1.1);
+	}
+	
+	.user-profile {
+		position: relative;
+		/* margin-left: 1rem; Remove fixed margin */
+	}
+	
+	.user-button {
+		display: flex;
+		align-items: center;
+		background-color: transparent;
+		border: 1px solid transparent;
+		color: var(--text-primary);
+		font-size: 0.9rem;
+		font-weight: 500; /* Slightly bolder */
+		gap: 0.5rem;
+		padding: 0.5rem 0.75rem;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	
+	.user-button:hover {
+		background-color: var(--hover-bg);
+		border-color: var(--border-color);
+	}
+	
+	.user-button i {
+		font-size: 1.3rem; /* Slightly larger icon */
+		color: var(--text-secondary);
+	}
+	
+	.user-dropdown {
+		position: absolute;
+		top: calc(100% + 8px); /* Add small gap */
+		right: 0;
+		width: 200px; /* Slightly wider */
+		background-color: var(--bg-secondary);
+		border-radius: 8px;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+		padding: 0.75rem;
+		display: none;
+		z-index: 100;
+		border: 1px solid var(--border-color);
+		opacity: 0;
+		transform: translateY(-10px);
+		transition: opacity 0.2s ease, transform 0.2s ease;
+	}
+	
+	.user-dropdown.active {
+		display: block;
+		opacity: 1;
+		transform: translateY(0);
+	}
+	
+	.user-dropdown a, 
+	.user-dropdown button {
+		display: flex; /* Use flex for icon alignment */
+		align-items: center; /* Align icon and text */
+		gap: 0.75rem; /* Space between icon and text */
+		width: 100%;
+		padding: 0.75rem 1rem;
+		text-align: left;
+		font-size: 0.9rem;
+		color: var(--text-primary);
+		background: none;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		text-decoration: none;
+		transition: background-color 0.2s, color 0.2s;
+	}
+	
+	.user-dropdown a:hover, 
+	.user-dropdown button:hover {
+		background-color: var(--hover-bg);
+		color: var(--accent);
+	}
+	
+	.user-dropdown button {
+		color: var(--error); /* Use error color variable */
+	}
+
+	.user-dropdown button:hover {
+		color: var(--error); /* Keep color on hover */
+		background-color: rgba(var(--error-rgb), 0.1); /* Use rgba for hover */
+	}
+</style> 

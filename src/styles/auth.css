@@ -1,0 +1,110 @@
+.auth-form {
+  /* ... existing styles ... */
+}
+
+.auth-form h2 {
+  /* ... existing styles ... */
+}
+
+.form-group {
+  /* ... existing styles ... */
+}
+
+.form-group label {
+  /* ... existing styles ... */
+}
+
+.form-group input {
+  /* ... existing styles ... */
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: rgb(var(--accent)); /* Use new accent color */
+  box-shadow: 0 0 0 3px rgba(var(--accent), 0.2);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  background-color: rgb(var(--accent)); /* Use new accent color */
+  color: var(--accent-text); /* Use contrast text */
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+}
+
+.submit-button:hover {
+  background-color: rgb(var(--accent-dark)); /* Use dark accent */
+}
+
+.auth-switch {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.auth-switch a {
+  color: rgb(var(--accent)); /* Use new accent color */
+  font-weight: 500;
+}
+
+.auth-switch a:hover {
+  color: rgb(var(--accent-dark)); /* Use dark accent */
+  text-decoration: underline;
+}
+
+.social-login {
+  /* ... existing styles ... */
+}
+
+.social-button {
+  /* ... existing styles ... */
+}
+
+.social-button.google {
+  /* ... existing styles ... */
+}
+
+/* ... other styles ... */
+
+.demo-login {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: rgba(var(--accent-light), 0.3);
+    border: 1px dashed rgb(var(--accent), 0.3);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.demo-login h4 {
+    margin: 0 0 0.5rem 0;
+    color: rgb(var(--accent-dark));
+    font-size: 0.95rem;
+}
+
+.demo-button {
+    padding: 0.5rem 1rem;
+    background-color: rgba(var(--accent), 0.15);
+    color: rgb(var(--accent));
+    border: 1px solid rgba(var(--accent), 0.2);
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.demo-button:hover {
+    background-color: rgba(var(--accent), 0.25);
+    border-color: rgba(var(--accent), 0.3);
+}
+
+.divider {
+    /* ... existing styles ... */
+} 

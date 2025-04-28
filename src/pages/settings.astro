@@ -1,0 +1,1056 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSession } from '../utils/authUtils';
+import supabase from '../utils/supabaseClient';
+---
+
+<Layout title="HookVault365 - Settings" activeNav="settings">
+  <div class="settings-container">
+    
+    <!-- Tab Navigation -->
+    <div class="tabs-nav">
+      <button class="tab-button active" data-tab="profile">Profile</button>
+      <button class="tab-button" data-tab="integrations">Integrations</button>
+      <button class="tab-button" data-tab="preferences">Preferences</button>
+      <button class="tab-button" data-tab="data">Data Management</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tabs-content">
+      
+      <!-- Profile Tab -->
+      <div id="profile" class="tab-pane active">
+        <div class="settings-section">
+          <h2 class="section-title">User Profile</h2>
+          <p class="section-description">View and update your profile information.</p>
+          <div class="profile-form">
+            <div class="form-group">
+              <label for="profile-name">Full Name</label>
+              <input type="text" id="profile-name" class="setting-input" readonly />
+            </div>
+            <div class="form-group">
+              <label for="profile-email">Email</label>
+              <input type="email" id="profile-email" class="setting-input" readonly />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <button id="change-password-btn" class="action-button">
+                 <i class="fas fa-key"></i> Change Password
+              </button>
+              <p class="input-help">Click to update your password (functionality coming soon).</p>
+            </div>
+            <div class="form-actions">
+              <button id="save-profile" class="save-button" disabled>
+                <i class="fas fa-save"></i> Save Profile (Coming Soon)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Integrations Tab -->
+      <div id="integrations" class="tab-pane">
+        <div class="settings-section">
+          <h2 class="section-title">API Keys</h2>
+          <p class="section-description">
+            Configure API keys for external services integration. Validated keys are saved securely.
+          </p>
+          <div class="api-key-form">
+            <div class="form-group">
+              <label for="openai-api-key">OpenAI API Key</label>
+              <div class="api-key-input">
+                <input type="password" id="openai-api-key" placeholder="sk-..." class="setting-input"/>
+                <button class="toggle-visibility" data-for="openai-api-key"><i class="fas fa-eye"></i></button>
+              </div>
+              <div id="openai-validation-status" class="validation-status"></div>
+              <p class="input-help">Used for AI-generated hook suggestions and variations.</p>
+            </div>
+            <div class="form-group">
+              <label for="google-api-key">Google Sheets API Key (Coming Soon)</label>
+              <div class="api-key-input">
+                <input type="password" id="google-api-key" placeholder="AIza..." class="setting-input" disabled/>
+                <button class="toggle-visibility" data-for="google-api-key" disabled><i class="fas fa-eye"></i></button>
+              </div>
+              <div id="google-validation-status" class="validation-status"></div>
+              <p class="input-help">Used for syncing with private Google Sheets (feature coming soon).</p>
+            </div>
+            <div class="form-actions">
+              <button id="save-api-keys" class="save-button">
+                <i class="fas fa-save"></i> Save & Validate API Keys
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Preferences Tab -->
+      <div id="preferences" class="tab-pane">
+        <div class="settings-section">
+          <h2 class="section-title">App Preferences</h2>
+          <p class="section-description">Customize the application appearance and behavior.</p>
+          <div class="form-group">
+            <label>Theme</label>
+            <div class="theme-selector">
+              <label class="theme-option">
+                <input type="radio" name="theme" value="light" checked />
+                <span class="theme-preview light-theme"><i class="fas fa-sun"></i> Light</span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="dark" />
+                <span class="theme-preview dark-theme"><i class="fas fa-moon"></i> Dark</span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="system" />
+                <span class="theme-preview system-theme"><i class="fas fa-laptop"></i> System</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group save-theme-group">
+            <label class="switch-label">
+              <span>Remember theme preference</span>
+              <div class="toggle-switch">
+                <input type="checkbox" id="remember-theme" checked />
+                <span class="toggle-slider"></span>
+              </div>
+            </label>
+            <p class="input-help">If enabled, theme changes will be saved and applied across all pages even after you refresh.</p>
+          </div>
+          <div class="form-group">
+            <label for="items-per-page">Items per page (Hook Vault)</label>
+            <select id="items-per-page" class="setting-input">
+              <option value="12">12</option>
+              <option value="24" selected>24</option>
+              <option value="36">36</option>
+              <option value="48">48</option>
+              <option value="60">60</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button id="save-preferences" class="save-button">
+              <i class="fas fa-save"></i> Save Preferences
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Data Management Tab -->
+      <div id="data" class="tab-pane">
+        <div class="settings-section">
+          <h2 class="section-title">Data Management</h2>
+          <p class="section-description">Manage your saved hooks, favorites, and application data.</p>
+          <div class="data-actions">
+            <button id="clear-favorites" class="action-button danger">
+              <i class="fas fa-trash"></i> Clear Favorites
+            </button>
+            <button id="reset-settings" class="action-button warning">
+              <i class="fas fa-exclamation-triangle"></i> Reset Settings
+            </button>
+            <button class="action-button import" disabled>
+              <i class="fas fa-file-import"></i> Import Data (Soon)
+            </button>
+            <button class="action-button export" disabled>
+              <i class="fas fa-file-export"></i> Export Data (Soon)
+            </button>
+          </div>
+        </div>
+      </div>
+      
+    </div> <!-- End Tabs Content -->
+    
+  </div> <!-- End Settings Container -->
+
+  <!-- Custom Confirmation Modal -->
+  <div id="confirmation-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Confirmation</h3>
+        <button class="modal-close" id="modal-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-message">Are you sure you want to proceed?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-cancel" class="modal-button cancel">Cancel</button>
+        <button id="modal-confirm" class="modal-button confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .settings-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .settings-section {
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+  
+  .section-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  .setting-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    background: var(--input-bg);
+    color: var(--text-primary);
+  }
+  
+  .setting-input:focus {
+    outline: none;
+    border-color: rgb(var(--accent));
+    box-shadow: 0 0 0 3px rgba(var(--accent), 0.2);
+  }
+  
+  .api-key-input {
+    position: relative;
+    display: flex;
+  }
+  
+  .toggle-visibility {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  
+  .toggle-visibility:hover {
+    opacity: 1;
+  }
+  
+  .input-help {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+  
+  .save-button {
+    background-color: rgb(var(--accent));
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .save-button:hover {
+    background-color: rgb(var(--accent-dark));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(var(--accent), 0.3);
+  }
+  
+  .theme-selector {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .theme-option {
+    flex: 1;
+    cursor: pointer;
+  }
+  
+  .theme-option input {
+    display: none;
+  }
+  
+  .theme-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--border-color);
+    transition: all 0.2s;
+    gap: 0.5rem;
+  }
+  
+  .theme-preview i {
+    font-size: 1.5rem;
+  }
+  
+  .theme-option input:checked + .theme-preview {
+    border-color: rgb(var(--accent));
+    background-color: rgba(var(--accent), 0.1);
+    color: rgb(var(--accent));
+  }
+  
+  .light-theme {
+    background: #ffffff;
+    color: #333;
+  }
+  
+  .dark-theme {
+    background: #1e293b;
+    color: #f9fafb;
+  }
+  
+  .system-theme {
+    background: linear-gradient(to right, #ffffff 50%, #1e293b 50%);
+    color: #333;
+  }
+  
+  .data-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .action-button {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .action-button i {
+    font-size: 1.25rem;
+  }
+  
+  .action-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow);
+  }
+  
+  .action-button.danger {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+  
+  .action-button.danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+  }
+  
+  .action-button.warning {
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.2);
+  }
+  
+  .action-button.warning:hover {
+    background: rgba(245, 158, 11, 0.1);
+  }
+  
+  .action-button.import {
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+  
+  .action-button.import:hover {
+    background: rgba(59, 130, 246, 0.1);
+  }
+  
+  .action-button.export {
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+  
+  .action-button.export:hover {
+    background: rgba(16, 185, 129, 0.1);
+  }
+  
+  /* Modal Styles */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .modal-content {
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    box-shadow: var(--card-shadow);
+    width: 90%;
+    max-width: 450px;
+    overflow: hidden;
+    animation: scaleIn 0.3s ease-out;
+  }
+  
+  .modal-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s;
+    padding: 0.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .modal-close:hover {
+    opacity: 1;
+    background-color: rgba(var(--accent-light), 0.1);
+    color: rgb(var(--accent));
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+    color: var(--text-primary);
+  }
+  
+  .modal-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  
+  .modal-button {
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .modal-button.cancel {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+  
+  .modal-button.cancel:hover {
+    background: var(--border-color);
+  }
+  
+  .modal-button.confirm {
+    background: rgb(var(--accent));
+    color: white;
+    border: none;
+  }
+  
+  .modal-button.confirm:hover {
+    background: rgb(var(--accent-dark));
+    transform: translateY(-2px);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  
+  @media (max-width: 768px) {
+    .theme-selector {
+      flex-direction: column;
+    }
+    
+    .data-actions {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Add Tab Styles */
+  .tabs-nav {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .tab-button {
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-bottom: -1px; /* Overlap border */
+  }
+
+  .tab-button:hover {
+    color: var(--text-primary);
+  }
+
+  .tab-button.active {
+    color: rgb(var(--accent));
+    border-bottom-color: rgb(var(--accent));
+  }
+
+  .tab-pane {
+    display: none; /* Hide inactive tabs by default */
+  }
+
+  .tab-pane.active {
+    display: block; /* Show active tab */
+    animation: fadeIn 0.5s ease; /* Add fade-in animation */
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Toggle Switch Styles */
+  .switch-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 26px;
+  }
+  
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .toggle-slider {
+    background-color: rgb(var(--accent));
+  }
+  
+  input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+  }
+  
+  .save-theme-group {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .validation-status {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    min-height: 1.2em; /* Reserve space to prevent layout shifts */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .validation-status.loading {
+    color: var(--text-secondary);
+  }
+  
+  .validation-status.success {
+    color: var(--success);
+    font-weight: 500;
+  }
+  
+  .validation-status.error {
+    color: var(--error);
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  import { showSuccess, showError, showWarning } from '../utils/notificationUtils';
+  import { setTheme } from '../utils/themeUtils';
+  import { getSession } from '../utils/authUtils';
+  import supabase from '../utils/supabaseClient';
+
+  // Tab Switching Logic
+  const tabs = document.querySelectorAll('.tab-button');
+  const panes = document.querySelectorAll('.tab-pane');
+
+  const switchToTab = (targetId) => {
+    // Deactivate all tabs and panes
+    tabs.forEach(t => t.classList.remove('active'));
+    panes.forEach(p => p.classList.remove('active'));
+    
+    // Activate the target tab and pane
+    const targetTab = document.querySelector(`[data-tab="${targetId}"]`);
+    if (targetTab) {
+      targetTab.classList.add('active');
+      document.getElementById(targetId).classList.add('active');
+    }
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetId = tab.getAttribute('data-tab');
+      switchToTab(targetId);
+    });
+  });
+
+  // Check if we need to open a specific tab on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check for tab in URL hash
+    const hash = window.location.hash.substring(1);
+    if (hash && document.getElementById(hash)) {
+      switchToTab(hash);
+    } 
+    // Check for tab in session storage (from AI hook generator)
+    else {
+      const targetTab = sessionStorage.getItem('open_settings_tab');
+      if (targetTab) {
+        switchToTab(targetTab);
+        // Clear the session storage
+        sessionStorage.removeItem('open_settings_tab');
+      }
+    }
+  });
+
+  // Handle input visibility toggle
+  document.querySelectorAll('.toggle-visibility').forEach(button => {
+    button.addEventListener('click', () => {
+      const inputId = button.getAttribute('data-for');
+      const input = document.getElementById(inputId);
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        button.querySelector('i').classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        button.querySelector('i').classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    });
+  });
+
+  // Load Profile Data
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Load API Keys
+    const openaiKey = localStorage.getItem('openai_api_key');
+    const googleKey = localStorage.getItem('google_api_key');
+    if (openaiKey) document.getElementById('openai-api-key').value = openaiKey;
+    if (googleKey) document.getElementById('google-api-key').value = googleKey;
+    
+    // Load Preferences
+    const currentTheme = localStorage.getItem('app_theme') || 'light';
+    const themeRadio = document.querySelector(`input[name="theme"][value="${currentTheme}"]`);
+    if (themeRadio) themeRadio.checked = true;
+    
+    const itemsPerPage = localStorage.getItem('items_per_page') || '24';
+    const itemsSelect = document.getElementById('items-per-page');
+    if (itemsSelect) itemsSelect.value = itemsPerPage;
+
+    try {
+      // Load Profile Data - use async version of getSession
+      const session = await getSession();
+      
+      if (session) {
+        const nameInput = document.getElementById('profile-name');
+        const emailInput = document.getElementById('profile-email');
+        
+        // Get display name from session or fallback to email username
+        const displayName = session.name || (session.email ? session.email.split('@')[0] : 'N/A');
+        
+        if (nameInput) nameInput.value = displayName;
+        if (emailInput) emailInput.value = session.email || 'N/A';
+      } else {
+        console.warn('Could not load user session for profile.');
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    }
+  });
+
+  // Handle API key save with validation
+  document.getElementById('save-api-keys')?.addEventListener('click', async () => {
+    const saveButton = document.getElementById('save-api-keys');
+    const openaiInput = document.getElementById('openai-api-key');
+    const openaiStatus = document.getElementById('openai-validation-status');
+    const googleInput = document.getElementById('google-api-key');
+    
+    const openaiKey = openaiInput.value.trim();
+    const googleKey = googleInput.value.trim();
+    
+    if (!openaiKey) {
+      showWarning('Please enter an OpenAI API Key.');
+      openaiStatus.textContent = '';
+      openaiStatus.className = 'validation-status';
+      return;
+    }
+
+    // Indicate loading/validation
+    saveButton.disabled = true;
+    saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validating...';
+    openaiStatus.className = 'validation-status loading';
+    openaiStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validating key...';
+
+    let isValid = false;
+    try {
+      const response = await fetch('/api/validate-openai-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey: openaiKey }),
+      });
+      
+      const result = await response.json();
+
+      if (response.ok && result.valid) {
+        isValid = true;
+        openaiStatus.className = 'validation-status success';
+        openaiStatus.innerHTML = '<i class="fas fa-check-circle"></i> API Key Validated!';
+      } else {
+        openaiStatus.className = 'validation-status error';
+        openaiStatus.innerHTML = `<i class="fas fa-times-circle"></i> ${result.error || 'Invalid API Key'}`;
+        showError(`OpenAI Key Validation Failed: ${result.error || 'Invalid Key'}`);
+      }
+    } catch (error) {
+      console.error('Validation request failed:', error);
+      openaiStatus.className = 'validation-status error';
+      openaiStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Validation failed. Check console.';
+      showError('API Key validation request failed. Check your connection.');
+    }
+
+    // Reset button state
+    saveButton.disabled = false;
+    saveButton.innerHTML = '<i class="fas fa-save"></i> Save & Validate API Keys';
+
+    // Only save if valid
+    if (isValid) {
+      try {
+        // Save to local storage first (always useful)
+        localStorage.setItem('openai_api_key', openaiKey);
+        if (googleKey) localStorage.setItem('google_api_key', googleKey);
+        localStorage.setItem('api_keys_updated_at', Date.now().toString());
+        
+        // Dispatch custom event
+        const apiKeyEvent = new CustomEvent('apiKeyUpdated', {
+          detail: { openaiKey, timestamp: Date.now() }
+        });
+        window.dispatchEvent(apiKeyEvent);
+        console.log('Dispatched apiKeyUpdated event after successful validation');
+
+        // Save to Supabase user_profiles table if logged in
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session && session.user) {
+            const { error: profileError } = await supabase
+              .from('user_profiles')
+              .update({ 
+                openai_api_key: openaiKey || null,
+                // google_api_key: googleKey || null // Keep google key disabled
+              })
+              .eq('id', session.user.id);
+              
+            if (profileError) {
+              console.warn('Could not save API key to user_profiles:', profileError);
+              // Attempt to insert if update failed (profile might not exist yet)
+              if (profileError.code === 'PGRST116') { // code for no rows updated
+                console.log('No profile found, attempting to insert...');
+                const { error: insertError } = await supabase
+                  .from('user_profiles')
+                  .insert({ 
+                    id: session.user.id, 
+                    openai_api_key: openaiKey || null 
+                  });
+                if (insertError) {
+                  console.error('Could not insert user profile with API key:', insertError);
+                  showError('Failed to save API key to profile.');
+                } else {
+                  console.log('User profile created and API key saved.');
+                  showSuccess('API key validated and saved successfully!');
+                }
+              } else {
+                 showError('Failed to save API key to profile.');
+              }
+            } else {
+              console.log('API key saved to user_profiles table.');
+              showSuccess('API keys validated and saved successfully!');
+            }
+          } else {
+            // User not logged in, only saved locally
+             showSuccess('API key validated and saved locally!');
+          }
+        } catch (supabaseError) {
+          console.warn('Error saving API key to Supabase:', supabaseError);
+           showError('Error saving API key to your account.');
+        }
+
+      } catch (error) {
+        showError('Failed to save API keys after validation: ' + error.message);
+        openaiStatus.className = 'validation-status error';
+        openaiStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Saved failed after validation.';
+      }
+    }
+  });
+
+  // Clear validation status when input changes
+  document.getElementById('openai-api-key')?.addEventListener('input', () => {
+    const openaiStatus = document.getElementById('openai-validation-status');
+    if (openaiStatus) {
+      openaiStatus.textContent = '';
+      openaiStatus.className = 'validation-status';
+    }
+  });
+
+  // Handle preferences save
+  document.getElementById('save-preferences')?.addEventListener('click', () => {
+    try {
+      const theme = document.querySelector('input[name="theme"]:checked').value;
+      const itemsPerPage = document.getElementById('items-per-page').value;
+      const rememberTheme = document.getElementById('remember-theme').checked;
+      
+      // Save items per page
+      localStorage.setItem('items_per_page', itemsPerPage);
+      
+      // Save theme preference setting
+      localStorage.setItem('remember_theme', rememberTheme.toString());
+      
+      // Save theme only if the user wants to remember it
+      if (rememberTheme) {
+        localStorage.setItem('app_theme', theme);
+      }
+      
+      // Apply theme regardless (it's already applied but this ensures consistency)
+      setTheme(theme, rememberTheme);
+      
+      // Show success notification
+      showSuccess('Preferences saved successfully!');
+    } catch (error) {
+      showError('Failed to save preferences: ' + error.message);
+    }
+  });
+  
+  // Custom confirmation modal functionality
+  const modal = document.getElementById('confirmation-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalMessage = document.getElementById('modal-message');
+  const modalConfirm = document.getElementById('modal-confirm');
+  const modalCancel = document.getElementById('modal-cancel');
+  const modalClose = document.getElementById('modal-close');
+  
+  // Show confirmation modal and return a promise
+  const showConfirmation = (title, message) => {
+    return new Promise((resolve) => {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      modal.classList.add('active');
+      
+      const handleConfirm = () => {
+        modal.classList.remove('active');
+        modalConfirm.removeEventListener('click', handleConfirm);
+        modalCancel.removeEventListener('click', handleCancel);
+        modalClose.removeEventListener('click', handleCancel);
+        resolve(true);
+      };
+      
+      const handleCancel = () => {
+        modal.classList.remove('active');
+        modalConfirm.removeEventListener('click', handleConfirm);
+        modalCancel.removeEventListener('click', handleCancel);
+        modalClose.removeEventListener('click', handleCancel);
+        resolve(false);
+      };
+      
+      modalConfirm.addEventListener('click', handleConfirm);
+      modalCancel.addEventListener('click', handleCancel);
+      modalClose.addEventListener('click', handleCancel);
+    });
+  };
+  
+  // Handle clearing favorites
+  document.getElementById('clear-favorites')?.addEventListener('click', async () => {
+    const confirmed = await showConfirmation(
+      'Clear Favorites',
+      'Are you sure you want to clear all favorites? This cannot be undone.'
+    );
+    
+    if (confirmed) {
+      try {
+        localStorage.removeItem('favorite_hooks');
+        // Also clear from IndexedDB if available
+        if ('indexedDB' in window) {
+          const request = indexedDB.deleteDatabase('hookVault365DB');
+          request.onsuccess = () => {
+            showSuccess('All favorites have been cleared.');
+          };
+          request.onerror = () => {
+            throw new Error('Failed to clear IndexedDB.');
+          };
+        } else {
+          showSuccess('All favorites have been cleared.');
+        }
+      } catch (error) {
+        showError('Failed to clear favorites: ' + error.message);
+      }
+    }
+  });
+  
+  // Handle resetting settings
+  document.getElementById('reset-settings')?.addEventListener('click', async () => {
+    const confirmed = await showConfirmation(
+      'Reset Settings',
+      'Are you sure you want to reset all settings? This will not affect your saved hooks or favorites.'
+    );
+    
+    if (confirmed) {
+      try {
+        // Reset all settings except hooks and favorites
+        localStorage.removeItem('app_theme');
+        localStorage.removeItem('items_per_page');
+        localStorage.removeItem('openai_api_key');
+        localStorage.removeItem('google_api_key');
+        
+        // Reset UI
+        document.querySelector('input[name="theme"][value="light"]').checked = true;
+        document.getElementById('items-per-page').value = '24';
+        document.getElementById('openai-api-key').value = '';
+        document.getElementById('google-api-key').value = '';
+        
+        // Apply default theme
+        setTheme('light');
+        
+        showSuccess('All settings have been reset to defaults.');
+      } catch (error) {
+        showError('Failed to reset settings: ' + error.message);
+      }
+    }
+  });
+
+  // Load the remember theme preference
+  document.addEventListener('DOMContentLoaded', () => {
+    const rememberTheme = localStorage.getItem('remember_theme');
+    if (rememberTheme !== null) {
+      document.getElementById('remember-theme').checked = rememberTheme === 'true';
+    }
+  });
+
+  // Add direct theme switch functionality on radio button change
+  document.querySelectorAll('input[name="theme"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        const newTheme = e.target.value;
+        const rememberTheme = document.getElementById('remember-theme')?.checked || false;
+        
+        // Apply theme immediately when radio is changed
+        setTheme(newTheme, rememberTheme);
+        
+        // Show temporary notification if not saving
+        if (!rememberTheme) {
+          showSuccess('Theme preview applied. Save preferences to keep this theme.');
+        }
+      }
+    });
+  });
+</script> 

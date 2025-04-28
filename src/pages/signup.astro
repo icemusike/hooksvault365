@@ -1,0 +1,463 @@
+---
+import AuthLayout from '../layouts/AuthLayout.astro';
+---
+
+<AuthLayout title="Sign Up - HookVault365">
+	<div class="signup-container">
+		<h2>Create Your Account</h2>
+		<form id="signup-form" class="auth-form">
+			<div class="form-group">
+				<label for="name">Full Name</label>
+				<input 
+					type="text" 
+					id="name" 
+					name="name" 
+					placeholder="Your name" 
+					required
+				/>
+			</div>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input 
+					type="email" 
+					id="email" 
+					name="email" 
+					placeholder="your@email.com" 
+					required
+				/>
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<div class="password-input">
+					<input 
+						type="password" 
+						id="password" 
+						name="password" 
+						placeholder="Create a password" 
+						required
+						minlength="6"
+					/>
+					<button type="button" id="toggle-password" aria-label="Toggle password visibility">
+						<i class="fas fa-eye"></i>
+					</button>
+				</div>
+				<div class="password-strength" id="password-strength">
+					<div class="strength-bar"></div>
+					<span class="strength-text">Password strength</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="confirm-password">Confirm Password</label>
+				<input 
+					type="password" 
+					id="confirm-password" 
+					name="confirm-password" 
+					placeholder="Confirm your password" 
+					required
+				/>
+				<div class="password-match" id="password-match"></div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn-primary">Create Account</button>
+			</div>
+			<div class="form-message" id="form-message"></div>
+		</form>
+		
+		<div class="auth-separator">
+			<span>Already have an account?</span>
+		</div>
+		
+		<div class="auth-links">
+			<a href="/login" class="btn-secondary">Login</a>
+		</div>
+	</div>
+</AuthLayout>
+
+<script>
+	import { registerUser, getSession } from '../utils/authUtils';
+
+	// Function to display form messages
+	const showMessage = (message, isError = false) => {
+		const messageElement = document.getElementById('form-message');
+		if (messageElement) {
+			messageElement.textContent = message;
+			messageElement.className = `form-message ${isError ? 'error' : 'success'}`;
+		}
+	};
+
+	// Check if user is already logged in
+	document.addEventListener('DOMContentLoaded', async () => {
+		console.log('Signup page loaded successfully');
+		
+		try {
+			// Use the async getSession function
+			const session = await getSession();
+			
+			// If already logged in, redirect to dashboard
+			if (session && session.isLoggedIn) {
+				console.log('User already logged in, redirecting to dashboard');
+				window.location.replace('/dashboard');
+			}
+		} catch (error) {
+			console.error('Error checking session:', error);
+		}
+	});
+
+	// Handle form submission
+	document.getElementById('signup-form')?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		
+		const name = document.getElementById('name')?.value;
+		const email = document.getElementById('email')?.value;
+		const password = document.getElementById('password')?.value;
+		const confirmPassword = document.getElementById('confirm-password')?.value;
+		
+		if (!name || !email || !password || !confirmPassword) {
+			showMessage('Please fill in all fields', true);
+			return;
+		}
+		
+		if (password !== confirmPassword) {
+			showMessage('Passwords do not match', true);
+			return;
+		}
+		
+		if (password.length < 6) {
+			showMessage('Password must be at least 6 characters', true);
+			return;
+		}
+		
+		// Disable the submit button
+		const submitButton = document.querySelector('.btn-primary');
+		if (submitButton) {
+			submitButton.disabled = true;
+			submitButton.textContent = 'Creating account...';
+		}
+		
+		try {
+			// Attempt to register with Supabase
+			const result = await registerUser({ name, email, password });
+			
+			if (result.success) {
+				showMessage('Registration successful! Please check your email for confirmation.');
+				
+				// Change button to indicate success
+				if (submitButton) {
+					submitButton.textContent = 'Account created! Redirecting...';
+				}
+				
+				// Redirect to login page after a short delay
+				setTimeout(() => {
+					window.location.href = '/login';
+				}, 3000);
+			} else {
+				showMessage(result.message || 'Registration failed', true);
+				
+				// Re-enable the button
+				if (submitButton) {
+					submitButton.disabled = false;
+					submitButton.textContent = 'Create Account';
+				}
+			}
+		} catch (error) {
+			console.error('Registration error:', error);
+			showMessage(error.message || 'An unexpected error occurred', true);
+			
+			// Re-enable the button
+			if (submitButton) {
+				submitButton.disabled = false;
+				submitButton.textContent = 'Create Account';
+			}
+		}
+	});
+
+	// Toggle password visibility
+	document.getElementById('toggle-password')?.addEventListener('click', () => {
+		const passwordInput = document.getElementById('password');
+		const icon = document.querySelector('#toggle-password i');
+		
+		if (passwordInput && icon) {
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				icon.className = 'fas fa-eye-slash';
+			} else {
+				passwordInput.type = 'password';
+				icon.className = 'fas fa-eye';
+			}
+		}
+	});
+
+	// Password strength check
+	document.getElementById('password')?.addEventListener('input', (e) => {
+		const password = e.target.value;
+		const strengthBar = document.querySelector('.strength-bar');
+		const strengthText = document.querySelector('.strength-text');
+		
+		if (!strengthBar || !strengthText) return;
+		
+		let strength = 0;
+		let status = '';
+		
+		if (password.length >= 6) strength += 1;
+		if (password.length >= 10) strength += 1;
+		if (/[A-Z]/.test(password)) strength += 1;
+		if (/[0-9]/.test(password)) strength += 1;
+		if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+		
+		switch (strength) {
+			case 0:
+				status = 'Very weak';
+				strengthBar.style.width = '20%';
+				strengthBar.style.backgroundColor = '#e53935';
+				break;
+			case 1:
+				status = 'Weak';
+				strengthBar.style.width = '40%';
+				strengthBar.style.backgroundColor = '#ff9800';
+				break;
+			case 2:
+				status = 'Medium';
+				strengthBar.style.width = '60%';
+				strengthBar.style.backgroundColor = '#ffc107';
+				break;
+			case 3:
+				status = 'Strong';
+				strengthBar.style.width = '80%';
+				strengthBar.style.backgroundColor = '#4caf50';
+				break;
+			case 4:
+			case 5:
+				status = 'Very strong';
+				strengthBar.style.width = '100%';
+				strengthBar.style.backgroundColor = '#2e7d32';
+				break;
+			default:
+				break;
+		}
+		
+		strengthText.textContent = status;
+	});
+
+	// Check password match
+	document.getElementById('confirm-password')?.addEventListener('input', (e) => {
+		const password = document.getElementById('password')?.value;
+		const confirmPassword = e.target.value;
+		const matchElement = document.getElementById('password-match');
+		
+		if (!matchElement || !password) return;
+		
+		if (confirmPassword === '') {
+			matchElement.textContent = '';
+			matchElement.className = 'password-match';
+		} else if (password === confirmPassword) {
+			matchElement.textContent = 'Passwords match';
+			matchElement.className = 'password-match match';
+		} else {
+			matchElement.textContent = 'Passwords do not match';
+			matchElement.className = 'password-match no-match';
+		}
+	});
+</script>
+
+<style>
+	.signup-container {
+		width: 100%;
+	}
+	
+	.signup-container h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 1.5rem;
+		color: var(--text-primary);
+		text-align: center;
+	}
+	
+	.auth-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+	
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	
+	.form-group label {
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: var(--text-secondary);
+	}
+	
+	.form-group input {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		font-size: 1rem;
+		border: 1px solid var(--border-color);
+		border-radius: 4px;
+		background-color: var(--input-bg);
+		color: var(--text-primary);
+		transition: border-color 0.2s;
+	}
+	
+	.form-group input:focus {
+		border-color: rgb(var(--accent));
+		outline: none;
+		box-shadow: 0 0 0 3px rgba(var(--accent), 0.2);
+	}
+	
+	.password-input {
+		position: relative;
+	}
+	
+	.password-input button {
+		position: absolute;
+		right: 0.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		color: var(--text-secondary);
+		cursor: pointer;
+		font-size: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.password-input button:hover {
+		color: rgb(var(--accent));
+	}
+	
+	.password-strength {
+		margin-top: 0.5rem;
+	}
+	
+	.strength-bar {
+		height: 4px;
+		width: 0%;
+		background-color: #e53935;
+		border-radius: 2px;
+		transition: width 0.3s, background-color 0.3s;
+	}
+	
+	.strength-text {
+		display: block;
+		font-size: 0.75rem;
+		color: var(--text-secondary);
+		margin-top: 0.25rem;
+	}
+	
+	.password-match {
+		font-size: 0.75rem;
+		margin-top: 0.25rem;
+	}
+	
+	.password-match.match {
+		color: #43a047;
+	}
+	
+	.password-match.no-match {
+		color: #e53935;
+	}
+	
+	.form-actions {
+		margin-top: 0.5rem;
+	}
+	
+	.btn-primary {
+		width: 100%;
+		padding: 0.75rem;
+		font-size: 1rem;
+		font-weight: 600;
+		background-color: rgb(var(--accent));
+		color: white;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: all 0.3s;
+		box-shadow: 0 4px 12px rgba(var(--accent), 0.3);
+	}
+	
+	.btn-primary:hover {
+		background-color: rgb(var(--accent-dark));
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(var(--accent), 0.4);
+	}
+	
+	.btn-primary:active {
+		transform: translateY(0);
+		box-shadow: 0 4px 8px rgba(var(--accent), 0.3);
+	}
+	
+	.auth-separator {
+		display: flex;
+		align-items: center;
+		margin: 1.5rem 0;
+	}
+	
+	.auth-separator::before,
+	.auth-separator::after {
+		content: '';
+		flex: 1;
+		border-bottom: 1px solid var(--border-color);
+	}
+	
+	.auth-separator span {
+		padding: 0 1rem;
+		font-size: 0.875rem;
+		color: var(--text-secondary);
+	}
+	
+	.auth-links {
+		display: flex;
+		justify-content: center;
+	}
+	
+	.btn-secondary {
+		display: inline-block;
+		padding: 0.9rem 2rem;
+		font-size: 1rem;
+		font-weight: 500;
+		text-align: center;
+		background-color: transparent;
+		color: rgb(var(--accent));
+		border: 1px solid rgb(var(--accent));
+		border-radius: 8px;
+		cursor: pointer;
+		transition: all 0.3s;
+		text-decoration: none;
+		box-shadow: 0 2px 6px rgba(var(--accent), 0.2);
+	}
+	
+	.btn-secondary:hover {
+		background-color: rgba(var(--accent), 0.1);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 10px rgba(var(--accent), 0.25);
+	}
+	
+	.btn-secondary:active {
+		transform: translateY(0);
+		box-shadow: 0 2px 5px rgba(var(--accent), 0.15);
+	}
+	
+	.form-message {
+		margin-top: 1rem;
+		padding: 0.75rem;
+		border-radius: 4px;
+		font-size: 0.875rem;
+	}
+	
+	.form-message.error {
+		background-color: rgba(255, 0, 0, 0.1);
+		color: #e53935;
+		border: 1px solid rgba(229, 57, 53, 0.3);
+	}
+	
+	.form-message.success {
+		background-color: rgba(76, 175, 80, 0.1);
+		color: #43a047;
+		border: 1px solid rgba(67, 160, 71, 0.3);
+	}
+</style> 
