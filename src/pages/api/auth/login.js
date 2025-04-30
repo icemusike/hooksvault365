@@ -1,7 +1,7 @@
 // Astro API endpoint for user login
 import { DEMO_USER } from '../../../utils/authUtils';
 
-export async function POST({ request }) {
+export async function post({ request }) {
   try {
     const data = await request.json();
     const { email, password } = data;
@@ -29,7 +29,6 @@ export async function POST({ request }) {
         email: DEMO_USER.email,
         name: DEMO_USER.name,
         isLoggedIn: true,
-        isDemoUser: true,
         timestamp: Date.now()
       };
       
@@ -39,8 +38,7 @@ export async function POST({ request }) {
         message: 'Login successful',
         user: {
           email: DEMO_USER.email,
-          name: DEMO_USER.name,
-          isDemoUser: true
+          name: DEMO_USER.name
         }
       }), {
         status: 200,

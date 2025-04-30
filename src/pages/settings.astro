@@ -50,23 +50,23 @@ import supabase from '../utils/supabaseClient';
       
       <!-- Integrations Tab -->
       <div id="integrations" class="tab-pane">
-        <div class="settings-section">
-          <h2 class="section-title">API Keys</h2>
-          <p class="section-description">
+      <div class="settings-section">
+        <h2 class="section-title">API Keys</h2>
+        <p class="section-description">
             Configure API keys for external services integration. Validated keys are saved securely.
-          </p>
-          <div class="api-key-form">
-            <div class="form-group">
-              <label for="openai-api-key">OpenAI API Key</label>
-              <div class="api-key-input">
+        </p>
+        <div class="api-key-form">
+          <div class="form-group">
+            <label for="openai-api-key">OpenAI API Key</label>
+            <div class="api-key-input">
                 <input type="password" id="openai-api-key" placeholder="sk-..." class="setting-input"/>
                 <button class="toggle-visibility" data-for="openai-api-key"><i class="fas fa-eye"></i></button>
-              </div>
-              <div id="openai-validation-status" class="validation-status"></div>
-              <p class="input-help">Used for AI-generated hook suggestions and variations.</p>
             </div>
-            
-            <div class="form-group">
+              <div id="openai-validation-status" class="validation-status"></div>
+            <p class="input-help">Used for AI-generated hook suggestions and variations.</p>
+          </div>
+          
+          <div class="form-group">
               <label for="openai-model">OpenAI Model</label>
               <div class="model-selection-container">
                 <select id="openai-model" class="setting-input model-dropdown" disabled>
@@ -82,7 +82,7 @@ import supabase from '../utils/supabaseClient';
             
             <div class="form-group">
               <label for="google-api-key">Google Sheets API Key (Coming Soon)</label>
-              <div class="api-key-input">
+            <div class="api-key-input">
                 <input type="password" id="google-api-key" placeholder="AIza..." class="setting-input" disabled/>
                 <button class="toggle-visibility" data-for="google-api-key" disabled><i class="fas fa-eye"></i></button>
               </div>
@@ -100,22 +100,22 @@ import supabase from '../utils/supabaseClient';
       
       <!-- Preferences Tab -->
       <div id="preferences" class="tab-pane">
-        <div class="settings-section">
-          <h2 class="section-title">App Preferences</h2>
+      <div class="settings-section">
+        <h2 class="section-title">App Preferences</h2>
           <p class="section-description">Customize the application appearance and behavior.</p>
-          <div class="form-group">
-            <label>Theme</label>
-            <div class="theme-selector">
-              <label class="theme-option">
-                <input type="radio" name="theme" value="light" checked />
+        <div class="form-group">
+          <label>Theme</label>
+          <div class="theme-selector">
+            <label class="theme-option">
+              <input type="radio" name="theme" value="light" checked />
                 <span class="theme-preview light-theme"><i class="fas fa-sun"></i> Light</span>
-              </label>
-              <label class="theme-option">
-                <input type="radio" name="theme" value="dark" />
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="dark" />
                 <span class="theme-preview dark-theme"><i class="fas fa-moon"></i> Dark</span>
-              </label>
-              <label class="theme-option">
-                <input type="radio" name="theme" value="system" />
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="system" />
                 <span class="theme-preview system-theme"><i class="fas fa-laptop"></i> System</span>
               </label>
             </div>
@@ -130,50 +130,50 @@ import supabase from '../utils/supabaseClient';
             </label>
             <p class="input-help">If enabled, theme changes will be saved and applied across all pages even after you refresh.</p>
           </div>
-          <div class="form-group">
+        <div class="form-group">
             <label for="items-per-page">Items per page (Hook Vault)</label>
-            <select id="items-per-page" class="setting-input">
-              <option value="12">12</option>
-              <option value="24" selected>24</option>
-              <option value="36">36</option>
-              <option value="48">48</option>
-              <option value="60">60</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button id="save-preferences" class="save-button">
-              <i class="fas fa-save"></i> Save Preferences
-            </button>
+          <select id="items-per-page" class="setting-input">
+            <option value="12">12</option>
+            <option value="24" selected>24</option>
+            <option value="36">36</option>
+            <option value="48">48</option>
+            <option value="60">60</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button id="save-preferences" class="save-button">
+            <i class="fas fa-save"></i> Save Preferences
+          </button>
           </div>
         </div>
       </div>
       
       <!-- Data Management Tab -->
       <div id="data" class="tab-pane">
-        <div class="settings-section">
-          <h2 class="section-title">Data Management</h2>
+      <div class="settings-section">
+        <h2 class="section-title">Data Management</h2>
           <p class="section-description">Manage your saved hooks, favorites, and application data.</p>
-          <div class="data-actions">
-            <button id="clear-favorites" class="action-button danger">
-              <i class="fas fa-trash"></i> Clear Favorites
-            </button>
-            <button id="reset-settings" class="action-button warning">
-              <i class="fas fa-exclamation-triangle"></i> Reset Settings
-            </button>
+        <div class="data-actions">
+          <button id="clear-favorites" class="action-button danger">
+            <i class="fas fa-trash"></i> Clear Favorites
+          </button>
+          <button id="reset-settings" class="action-button warning">
+            <i class="fas fa-exclamation-triangle"></i> Reset Settings
+          </button>
             <button class="action-button import" disabled>
               <i class="fas fa-file-import"></i> Import Data (Soon)
-            </button>
+          </button>
             <button class="action-button export" disabled>
               <i class="fas fa-file-export"></i> Export Data (Soon)
-            </button>
-          </div>
+          </button>
         </div>
       </div>
+    </div>
       
     </div> <!-- End Tabs Content -->
     
   </div> <!-- End Settings Container -->
-
+  
   <!-- Custom Confirmation Modal -->
   <div id="confirmation-modal" class="modal">
     <div class="modal-content">
@@ -796,22 +796,22 @@ import supabase from '../utils/supabaseClient';
     const saveApiKeysBtn = document.getElementById('save-api-keys');
     
     // Toggle password visibility
-    document.querySelectorAll('.toggle-visibility').forEach(button => {
-      button.addEventListener('click', () => {
-        const inputId = button.getAttribute('data-for');
-        const input = document.getElementById(inputId);
+  document.querySelectorAll('.toggle-visibility').forEach(button => {
+    button.addEventListener('click', () => {
+      const inputId = button.getAttribute('data-for');
+      const input = document.getElementById(inputId);
         const icon = button.querySelector('i');
-        
-        if (input.type === 'password') {
-          input.type = 'text';
+      
+      if (input.type === 'password') {
+        input.type = 'text';
           icon.className = 'fas fa-eye-slash';
-        } else {
-          input.type = 'password';
+      } else {
+        input.type = 'password';
           icon.className = 'fas fa-eye';
-        }
-      });
+      }
     });
-    
+  });
+
     // OpenAI Model Selection
     const modelDropdown = document.getElementById('openai-model');
     const refreshModelsBtn = document.getElementById('refresh-models');
