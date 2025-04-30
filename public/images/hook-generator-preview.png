@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" rx="8" fill="#F8F9FA"/>
+  <rect x="2" y="2" width="596" height="396" rx="6" stroke="#E9ECEF" stroke-width="2"/>
+  
+  <!-- App Header -->
+  <rect x="0" y="0" width="600" height="50" rx="8" fill="#FF0000"/>
+  <text x="20" y="30" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">HookVault</text>
+  
+  <!-- Generator Panel -->
+  <rect x="20" y="70" width="560" height="150" rx="8" fill="white" stroke="#E9ECEF" stroke-width="2"/>
+  <text x="40" y="100" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333333">Generate YouTube Hooks</text>
+  
+  <!-- Form Fields -->
+  <rect x="40" y="120" width="400" height="30" rx="4" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1"/>
+  <text x="50" y="140" font-family="Arial, sans-serif" font-size="12" fill="#6C757D">Enter your video topic or title...</text>
+  
+  <!-- Generate Button -->
+  <rect x="450" y="120" width="130" height="30" rx="4" fill="#FF0000"/>
+  <text x="480" y="140" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">Generate</text>
+  
+  <!-- Options -->
+  <rect x="40" y="160" width="100" height="24" rx="4" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1"/>
+  <text x="55" y="176" font-family="Arial, sans-serif" font-size="10" fill="#6C757D">Pattern Interrupt</text>
+  
+  <rect x="150" y="160" width="100" height="24" rx="4" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1"/>
+  <text x="170" y="176" font-family="Arial, sans-serif" font-size="10" fill="#6C757D">Curiosity Gap</text>
+  
+  <rect x="260" y="160" width="100" height="24" rx="4" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1"/>
+  <text x="290" y="176" font-family="Arial, sans-serif" font-size="10" fill="#6C757D">Benefit</text>
+  
+  <!-- Results Panel -->
+  <rect x="20" y="240" width="560" height="140" rx="8" fill="white" stroke="#E9ECEF" stroke-width="2"/>
+  <text x="40" y="270" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333333">Generated Hooks</text>
+  
+  <!-- Sample Hooks -->
+  <rect x="40" y="290" width="520" height="30" rx="4" fill="#F8F9FA"/>
+  <text x="50" y="310" font-family="Arial, sans-serif" font-size="12" fill="#333333">Stop doing this ONE mistake that's killing your YouTube growth...</text>
+  
+  <rect x="40" y="330" width="520" height="30" rx="4" fill="#F8F9FA"/>
+  <text x="50" y="350" font-family="Arial, sans-serif" font-size="12" fill="#333333">I tried 50 different hooks and THIS one tripled my CTR overnight</text>
+</svg> 

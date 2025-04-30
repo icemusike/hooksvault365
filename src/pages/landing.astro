@@ -1,839 +1,1266 @@
 ---
 import '../styles/global.css';
 import { getSession, SESSION_KEY } from '../utils/authUtils';
+import LandingLayout from '../layouts/LandingLayout.astro';
+import LandingNav from '../components/LandingNav.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="HookVault365 - Pattern Interrupt Swipe Files">
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-		<meta name="generator" content={Astro.generator} />
-		<title>HookVault365 - Pattern Interrupt Swipe Files</title>
-	</head>
-	<body>
-		<div class="landing-container">
-			<header class="landing-header">
-				<div class="landing-logo">
-					<h2>HookVault365</h2>
-				</div>
-				<nav class="landing-nav">
-					<a href="#features">Features</a>
-					<a href="#pricing">Pricing</a>
-					<a href="#faq">FAQ</a>
-					<a href="/login" class="btn-secondary">Login</a>
-					<a href="/signup" class="btn-primary">Sign Up</a>
-				</nav>
-			</header>
-			
-			<section class="hero">
+<LandingLayout title="HookVault - Generate High-Converting YouTube Hooks">
+	<LandingNav />
+	
+	<main class="landing-page">
+		<!-- Hero Section -->
+		<section class="hero-section">
+			<div class="container hero-container">
 				<div class="hero-content">
-					<h1>Unlock the Power of <span class="highlight">Pattern Interrupts</span></h1>
-					<p class="hero-subtitle">The ultimate collection of marketing hooks to boost engagement, increase conversions, and drive sales</p>
-					<div class="hero-cta">
-						<a href="/signup" class="btn-primary btn-large">Get Started Free</a>
-						<a href="#features" class="btn-text">Learn More <i class="fas fa-arrow-right"></i></a>
+					<h1>Generate <span class="highlight">High-Converting</span> YouTube Hooks with AI</h1>
+					<p class="hero-subtitle">Stop wasting hours crafting hooks that don't convert. HookVault helps content creators generate attention-grabbing hooks in seconds.</p>
+					<div class="hero-buttons">
+						<a href="/register" class="cta-button">Get Started Free</a>
+						<a href="#demo" class="secondary-button">See Demo</a>
+					</div>
+					<div class="hero-stats">
+						<div class="stat">
+							<span class="stat-number">3X</span>
+							<span class="stat-text">Higher CTR</span>
+						</div>
+						<div class="stat">
+							<span class="stat-number">5K+</span>
+							<span class="stat-text">Creators</span>
+						</div>
+						<div class="stat">
+							<span class="stat-number">10M+</span>
+							<span class="stat-text">Hooks Generated</span>
+						</div>
 					</div>
 				</div>
 				<div class="hero-image">
-					<img src="/hero-image.svg" alt="HookVault365 Dashboard" />
+					<div class="hero-image-frame">
+						<img src="/images/hook-generator-preview.svg" alt="HookVault AI Hook Generator" />
+					</div>
 				</div>
-			</section>
-			
-			<section id="features" class="features">
-				<div class="section-header">
-					<h2>Features</h2>
-					<p>Everything you need to craft compelling marketing messages</p>
+			</div>
+		</section>
+
+		<!-- Problem Section -->
+		<section class="problem-section" id="problem">
+			<div class="container">
+				<h2>The YouTube Hook <span class="highlight">Problem</span></h2>
+				<div class="problem-cards">
+					<div class="problem-card">
+						<div class="problem-icon">⏱️</div>
+						<h3>Time Wasted</h3>
+						<p>Creators spend hours trying to craft the perfect hook, only to see poor retention rates.</p>
+					</div>
+					<div class="problem-card">
+						<div class="problem-icon">📉</div>
+						<h3>Low CTR</h3>
+						<p>Generic hooks fail to grab viewer attention, resulting in fewer clicks and views.</p>
+					</div>
+					<div class="problem-card">
+						<div class="problem-icon">🔄</div>
+						<h3>Repetitive Process</h3>
+						<p>Creating unique hooks for every video becomes monotonous and creatively draining.</p>
+					</div>
 				</div>
-				
+			</div>
+		</section>
+
+		<!-- Features Section -->
+		<section class="features-section" id="features">
+			<div class="container">
+				<h2>Features That Make <span class="highlight">Creators Love</span> HookVault</h2>
 				<div class="features-grid">
 					<div class="feature-card">
-						<div class="feature-icon">
-							<i class="fas fa-search"></i>
-						</div>
-						<h3>Searchable Hook Library</h3>
-						<p>Find the perfect hook for any niche with our powerful search and filter system</p>
+						<div class="feature-icon">🤖</div>
+						<h3>AI Hook Generator</h3>
+						<p>Generate dozens of high-converting hooks tailored to your content in seconds.</p>
 					</div>
-					
 					<div class="feature-card">
-						<div class="feature-icon">
-							<i class="fas fa-star"></i>
-						</div>
-						<h3>Favorite Collection</h3>
-						<p>Save your best-performing hooks for quick access whenever you need them</p>
+						<div class="feature-icon">📊</div>
+						<h3>Pattern Interrupt Templates</h3>
+						<p>Choose from proven templates that grab viewer attention and boost retention.</p>
 					</div>
-					
 					<div class="feature-card">
-						<div class="feature-icon">
-							<i class="fas fa-robot"></i>
-						</div>
-						<h3>AI Hook Generation</h3>
-						<p>Generate custom pattern interrupts tailored to your specific needs</p>
+						<div class="feature-icon">📋</div>
+						<h3>Hook Vault Storage</h3>
+						<p>Save your favorite hooks and organize them for future videos.</p>
 					</div>
-					
 					<div class="feature-card">
-						<div class="feature-icon">
-							<i class="fas fa-copy"></i>
-						</div>
-						<h3>One-Click Copy</h3>
-						<p>Copy hooks directly to your clipboard for immediate use in your marketing</p>
+						<div class="feature-icon">📱</div>
+						<h3>Mobile Friendly</h3>
+						<p>Create hooks on the go from any device with our responsive interface.</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">🔍</div>
+						<h3>Niche Targeting</h3>
+						<p>Generate hooks specifically tailored to your content niche.</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">🔄</div>
+						<h3>One-Click Regeneration</h3>
+						<p>Not satisfied? Regenerate new hook options with a single click.</p>
 					</div>
 				</div>
-			</section>
-			
-			<section id="pricing" class="pricing">
-				<div class="section-header">
-					<h2>Pricing</h2>
-					<p>Simple, transparent pricing for everyone</p>
+			</div>
+		</section>
+
+		<!-- How It Works Section -->
+		<section class="how-it-works-section" id="how-it-works">
+			<div class="container">
+				<h2>How <span class="highlight">HookVault</span> Works</h2>
+				<div class="steps">
+					<div class="step">
+						<div class="step-number">1</div>
+						<h3>Enter Your Video Topic</h3>
+						<p>Provide your video title, description, or main talking points.</p>
+					</div>
+					<div class="step-arrow">→</div>
+					<div class="step">
+						<div class="step-number">2</div>
+						<h3>Select Template Style</h3>
+						<p>Choose from pattern interrupt, curiosity gap, or other proven hook formats.</p>
+					</div>
+					<div class="step-arrow">→</div>
+					<div class="step">
+						<div class="step-number">3</div>
+						<h3>Generate & Save</h3>
+						<p>Get instant hook suggestions and save your favorites to your vault.</p>
+					</div>
 				</div>
-				
+			</div>
+		</section>
+
+		<!-- Testimonials Section -->
+		<section class="testimonials-section" id="testimonials">
+			<div class="container">
+				<h2>What <span class="highlight">Creators Say</span> About Us</h2>
+				<div class="testimonials-slider">
+					<div class="testimonial">
+						<div class="testimonial-content">
+							<p>"HookVault helped me increase my CTR from 4% to 11% in just one month. The hook templates are game-changing!"</p>
+						</div>
+						<div class="testimonial-author">
+							<img src="/images/testimonial-1.svg" alt="Sarah J." />
+							<div>
+								<h4>Sarah J.</h4>
+								<p>Tech YouTuber, 450K subscribers</p>
+							</div>
+						</div>
+					</div>
+					<div class="testimonial">
+						<div class="testimonial-content">
+							<p>"I save at least 2 hours per video with HookVault. The AI somehow knows exactly what will grab my audience's attention."</p>
+						</div>
+						<div class="testimonial-author">
+							<img src="/images/testimonial-2.svg" alt="Marcus T." />
+							<div>
+								<h4>Marcus T.</h4>
+								<p>Fitness Creator, 120K subscribers</p>
+							</div>
+						</div>
+					</div>
+					<div class="testimonial">
+						<div class="testimonial-content">
+							<p>"Since using HookVault, my average view duration increased by 25%. The pattern interrupt templates are pure gold!"</p>
+						</div>
+						<div class="testimonial-author">
+							<img src="/images/testimonial-3.svg" alt="Elena R." />
+							<div>
+								<h4>Elena R.</h4>
+								<p>DIY & Crafts Channel, 89K subscribers</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Demo Section -->
+		<section class="demo-section" id="demo">
+			<div class="container">
+				<h2>See <span class="highlight">HookVault</span> in Action</h2>
+				<div class="demo-video">
+					<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="HookVault Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+				<div class="demo-cta">
+					<p>Ready to transform your YouTube hooks?</p>
+					<a href="/register" class="cta-button">Try HookVault Free</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- Offer Section -->
+		<section class="offer-section" id="offer">
+			<div class="container">
+				<h2>Choose Your <span class="highlight">Perfect Plan</span></h2>
 				<div class="pricing-cards">
 					<div class="pricing-card">
 						<div class="pricing-header">
-							<h3>Free</h3>
-							<div class="price">$0</div>
-							<p>Perfect for getting started</p>
+							<h3>Starter</h3>
+							<div class="price">
+								<span class="currency">$</span>
+								<span class="amount">0</span>
+								<span class="period">/month</span>
+							</div>
 						</div>
 						<ul class="pricing-features">
-							<li><i class="fas fa-check"></i> Access to 50+ hooks</li>
-							<li><i class="fas fa-check"></i> Basic search and filter</li>
-							<li><i class="fas fa-check"></i> Save up to 10 favorites</li>
-							<li><i class="fas fa-times"></i> No AI generation</li>
-							<li><i class="fas fa-times"></i> No premium collections</li>
+							<li>Generate 10 hooks daily</li>
+							<li>Basic templates</li>
+							<li>Save up to 50 hooks</li>
+							<li>Standard support</li>
 						</ul>
-						<a href="/signup" class="btn-secondary full-width">Sign Up Free</a>
+						<a href="/register" class="pricing-button">Start Free</a>
 					</div>
-					
 					<div class="pricing-card featured">
-						<div class="pricing-badge">Popular</div>
+						<div class="pricing-badge">Most Popular</div>
 						<div class="pricing-header">
 							<h3>Pro</h3>
-							<div class="price">$19<span>/month</span></div>
-							<p>For serious marketers</p>
+							<div class="price">
+								<span class="currency">$</span>
+								<span class="amount">19</span>
+								<span class="period">/month</span>
+							</div>
 						</div>
 						<ul class="pricing-features">
-							<li><i class="fas fa-check"></i> Access to 500+ hooks</li>
-							<li><i class="fas fa-check"></i> Advanced search and filter</li>
-							<li><i class="fas fa-check"></i> Unlimited favorites</li>
-							<li><i class="fas fa-check"></i> 50 AI generations/month</li>
-							<li><i class="fas fa-check"></i> All premium collections</li>
+							<li>Unlimited hook generation</li>
+							<li>All premium templates</li>
+							<li>Unlimited hook storage</li>
+							<li>Priority support</li>
+							<li>Advanced analytics</li>
 						</ul>
-						<a href="/signup" class="btn-primary full-width">Get Started</a>
+						<a href="/register?plan=pro" class="pricing-button">Go Pro</a>
 					</div>
-					
 					<div class="pricing-card">
 						<div class="pricing-header">
-							<h3>Enterprise</h3>
-							<div class="price">$49<span>/month</span></div>
-							<p>For marketing teams</p>
+							<h3>Agency</h3>
+							<div class="price">
+								<span class="currency">$</span>
+								<span class="amount">49</span>
+								<span class="period">/month</span>
+							</div>
 						</div>
 						<ul class="pricing-features">
-							<li><i class="fas fa-check"></i> Everything in Pro</li>
-							<li><i class="fas fa-check"></i> Team collaboration</li>
-							<li><i class="fas fa-check"></i> Custom collections</li>
-							<li><i class="fas fa-check"></i> Unlimited AI generations</li>
-							<li><i class="fas fa-check"></i> Priority support</li>
+							<li>Everything in Pro</li>
+							<li>Team collaboration</li>
+							<li>Custom templates</li>
+							<li>API access</li>
+							<li>Dedicated account manager</li>
 						</ul>
-						<a href="/signup" class="btn-secondary full-width">Contact Sales</a>
+						<a href="/register?plan=agency" class="pricing-button">Get Agency</a>
 					</div>
 				</div>
-			</section>
-			
-			<section id="faq" class="faq">
-				<div class="section-header">
-					<h2>Frequently Asked Questions</h2>
-					<p>Got questions? We've got answers</p>
-				</div>
-				
+			</div>
+		</section>
+
+		<!-- FAQ Section -->
+		<section class="faq-section" id="faq">
+			<div class="container">
+				<h2>Frequently Asked <span class="highlight">Questions</span></h2>
 				<div class="faq-list">
 					<div class="faq-item">
 						<div class="faq-question">
-							<h3>What are pattern interrupts?</h3>
-							<button class="faq-toggle"><i class="fas fa-plus"></i></button>
+							<h3>How does HookVault's AI generate hooks?</h3>
+							<span class="faq-toggle">+</span>
 						</div>
 						<div class="faq-answer">
-							<p>Pattern interrupts are writing techniques that break the reader's expected pattern, grabbing attention and increasing engagement. They're essential for marketing copy that stands out in today's crowded digital landscape.</p>
+							<p>HookVault uses advanced AI trained on thousands of high-performing YouTube videos to generate hooks that are tailored to your specific content and niche. Our algorithm analyzes what works best for different types of content.</p>
 						</div>
 					</div>
-					
 					<div class="faq-item">
 						<div class="faq-question">
-							<h3>How many new hooks are added?</h3>
-							<button class="faq-toggle"><i class="fas fa-plus"></i></button>
+							<h3>Can I use HookVault for any YouTube niche?</h3>
+							<span class="faq-toggle">+</span>
 						</div>
 						<div class="faq-answer">
-							<p>We add at least 20 new hooks every month across various niches and industries. Pro and Enterprise members get immediate access to all new additions.</p>
+							<p>Yes! HookVault works for all YouTube niches, from tech and gaming to cooking and education. You can specify your niche when generating hooks to get more targeted results.</p>
 						</div>
 					</div>
-					
 					<div class="faq-item">
 						<div class="faq-question">
-							<h3>Can I use these hooks in my business?</h3>
-							<button class="faq-toggle"><i class="fas fa-plus"></i></button>
+							<h3>How many hooks can I generate with the free plan?</h3>
+							<span class="faq-toggle">+</span>
 						</div>
 						<div class="faq-answer">
-							<p>Yes! All hooks in our collection are licensed for commercial use. You can use them in your marketing campaigns, social media posts, emails, and ads.</p>
+							<p>The free plan allows you to generate up to 10 hooks per day and store up to 50 hooks in your vault. For unlimited generation and storage, check out our Pro or Agency plans.</p>
 						</div>
 					</div>
-					
 					<div class="faq-item">
 						<div class="faq-question">
-							<h3>How does the AI hook generator work?</h3>
-							<button class="faq-toggle"><i class="fas fa-plus"></i></button>
+							<h3>Can I cancel my subscription anytime?</h3>
+							<span class="faq-toggle">+</span>
 						</div>
 						<div class="faq-answer">
-							<p>Our AI analyzes thousands of successful hooks and creates custom ones based on your specific inputs like niche, tone, and target audience. It's trained on proven marketing principles to ensure high-quality results.</p>
+							<p>Absolutely! There are no contracts or commitments. You can upgrade, downgrade, or cancel your subscription at any time from your account dashboard.</p>
+						</div>
+					</div>
+					<div class="faq-item">
+						<div class="faq-question">
+							<h3>Do you offer refunds?</h3>
+							<span class="faq-toggle">+</span>
+						</div>
+						<div class="faq-answer">
+							<p>Yes, we offer a 14-day money-back guarantee if you're not satisfied with HookVault for any reason. Simply contact our support team to process your refund.</p>
 						</div>
 					</div>
 				</div>
-			</section>
-			
-			<section class="cta-section">
-				<h2>Ready to Transform Your Marketing?</h2>
-				<p>Join thousands of marketers who are already using HookVault365 to create compelling content</p>
-				<a href="/signup" class="btn-primary btn-large">Start Your Free Trial</a>
-			</section>
-			
-			<footer class="landing-footer">
-				<div class="footer-logo">
-					<h2>HookVault365</h2>
-					<p>Your Pattern Interrupt Swipe File Collection</p>
+			</div>
+		</section>
+
+		<!-- CTA Section -->
+		<section class="cta-section">
+			<div class="container">
+				<h2>Ready to <span class="highlight">10X Your YouTube Growth</span> with Better Hooks?</h2>
+				<p>Join thousands of creators who are saving time and boosting their views with HookVault.</p>
+				<div class="cta-buttons">
+					<a href="/register" class="cta-button">Start Creating Hooks Free</a>
+					<a href="#demo" class="secondary-button">Watch Demo Again</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="landing-footer">
+		<div class="container">
+			<div class="footer-grid">
+				<div class="footer-brand">
+					<img src="/images/hook_Vault_logo.png" alt="HookVault Logo" class="footer-logo" />
+					<p>The AI-powered hook generator helping creators grow on YouTube.</p>
+					<div class="social-icons">
+						<a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+						<a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+						<a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+					</div>
 				</div>
 				<div class="footer-links">
-					<div class="footer-column">
-						<h3>Product</h3>
-						<a href="#features">Features</a>
-						<a href="#pricing">Pricing</a>
-						<a href="#faq">FAQ</a>
-					</div>
-					<div class="footer-column">
-						<h3>Company</h3>
-						<a href="#">About</a>
-						<a href="#">Blog</a>
-						<a href="#">Careers</a>
-					</div>
-					<div class="footer-column">
-						<h3>Legal</h3>
-						<a href="#">Terms</a>
-						<a href="#">Privacy</a>
-						<a href="#">Cookies</a>
-					</div>
+					<h4>Product</h4>
+					<ul>
+						<li><a href="#features">Features</a></li>
+						<li><a href="#how-it-works">How It Works</a></li>
+						<li><a href="#demo">Demo</a></li>
+						<li><a href="#offer">Pricing</a></li>
+					</ul>
 				</div>
-				<div class="footer-bottom">
-					<p>&copy; 2023 HookVault365. All rights reserved.</p>
-					<div class="social-links">
-						<a href="#"><i class="fab fa-twitter"></i></a>
-						<a href="#"><i class="fab fa-facebook"></i></a>
-						<a href="#"><i class="fab fa-instagram"></i></a>
-						<a href="#"><i class="fab fa-linkedin"></i></a>
-					</div>
+				<div class="footer-links">
+					<h4>Resources</h4>
+					<ul>
+						<li><a href="/blog">Blog</a></li>
+						<li><a href="/tips">Hook Tips</a></li>
+						<li><a href="/tutorials">Tutorials</a></li>
+						<li><a href="/support">Support</a></li>
+					</ul>
 				</div>
-			</footer>
+				<div class="footer-links">
+					<h4>Company</h4>
+					<ul>
+						<li><a href="/about">About Us</a></li>
+						<li><a href="/privacy">Privacy Policy</a></li>
+						<li><a href="/terms">Terms of Service</a></li>
+						<li><a href="/contact">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<p>&copy; 2023 HookVault. All rights reserved.</p>
+			</div>
 		</div>
-	</body>
-</html>
+	</footer>
+</LandingLayout>
 
 <script>
-  import { initializeTheme } from '../utils/themeUtils';
-  import { getSession, SESSION_KEY } from '../utils/authUtils';
-  
-  // Initialize theme on page load
-  document.addEventListener('DOMContentLoaded', () => {
-    initializeTheme();
-    
-    // Check if user is already authenticated, if so redirect to dashboard
-    setTimeout(() => {
-      const session = getSession();
-      console.log('Landing page auth check:', {
-        session,
-        sessionString: localStorage.getItem(SESSION_KEY)
-      });
-      
-      if (session && session.isLoggedIn) {
-        console.log('User already authenticated, redirecting to dashboard');
-        
-        try {
-          // Use location.replace for a clean redirect without browser history
-          window.location.replace('/dashboard');
-        } catch (err) {
-          console.error('Error redirecting to dashboard:', err);
-          
-          // Fallback method if replace fails
-          window.location.href = '/dashboard';
-        }
-      } else {
-        console.log('User not authenticated, staying on landing page');
-      }
-    }, 500); // Allow more time for session to load
-    
-    // FAQ toggle functionality
-    const faqToggles = document.querySelectorAll('.faq-toggle');
-    faqToggles.forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const faqItem = toggle.closest('.faq-item');
-        faqItem.classList.toggle('active');
-        
-        const icon = toggle.querySelector('i');
-        icon.className = faqItem.classList.contains('active') ? 'fas fa-minus' : 'fas fa-plus';
-      });
-    });
-  });
+	import { initializeTheme } from '../utils/themeUtils';
+	import { getSession, SESSION_KEY } from '../utils/authUtils';
+	
+	// Initialize theme on page load
+	document.addEventListener('DOMContentLoaded', () => {
+		initializeTheme();
+		
+		// Check if user is already authenticated, if so redirect to dashboard
+		setTimeout(() => {
+			const session = getSession();
+			console.log('Landing page auth check:', {
+				session,
+				sessionString: localStorage.getItem(SESSION_KEY)
+			});
+			
+			if (session && session.isLoggedIn) {
+				console.log('User already authenticated, redirecting to dashboard');
+				
+				try {
+					// Use location.replace for a clean redirect without browser history
+					window.location.replace('/dashboard');
+				} catch (err) {
+					console.error('Error redirecting to dashboard:', err);
+					
+					// Fallback method if replace fails
+					window.location.href = '/dashboard';
+				}
+			} else {
+				console.log('User not authenticated, staying on landing page');
+			}
+		}, 500); // Allow more time for session to load
+		
+		// FAQ toggle functionality
+		const faqToggles = document.querySelectorAll('.faq-toggle');
+		faqToggles.forEach(toggle => {
+			toggle.addEventListener('click', () => {
+				const faqItem = toggle.closest('.faq-item');
+				faqItem.classList.toggle('active');
+				
+				const icon = toggle.querySelector('i');
+				icon.className = faqItem.classList.contains('active') ? 'fas fa-minus' : 'fas fa-plus';
+			});
+		});
+		
+		// FAQ toggle functionality (alternative implementation)
+		const faqItems = document.querySelectorAll('.faq-item');
+		faqItems.forEach(item => {
+			const question = item.querySelector('.faq-question');
+			
+			question.addEventListener('click', () => {
+				item.classList.toggle('active');
+			});
+		});
+	});
 </script>
 
 <style>
-	/* General styles */
-	.landing-container {
-		max-width: 100%;
-		overflow-x: hidden;
+	/* Brand Colors */
+	:root {
+		--primary: #FF0000; /* YouTube Red */
+		--secondary: #009688; /* HookVault Teal */
+		--accent: #00E5FF; /* Aqua Glow */
+		--gray-100: #F8F9FA;
+		--gray-200: #E9ECEF;
+		--gray-300: #DEE2E6;
+		--gray-400: #CED4DA;
+		--gray-500: #ADB5BD;
+		--gray-600: #6C757D;
+		--gray-700: #495057;
+		--gray-800: #343A40;
+		--gray-900: #212529;
+		--white: #FFFFFF;
+		--black: #000000;
 	}
-	
-	.section-header {
-		text-align: center;
-		margin-bottom: 3rem;
+
+	/* General Styles */
+	.landing-page {
+		font-family: 'Inter', sans-serif;
+		color: var(--gray-800);
+		line-height: 1.6;
 	}
-	
-	.section-header h2 {
-		font-size: 2.5rem;
-		font-weight: 700;
-		color: var(--text-primary);
-		margin-bottom: 1rem;
-	}
-	
-	.section-header p {
-		font-size: 1.2rem;
-		color: var(--text-secondary);
-		max-width: 600px;
+
+	.container {
+		max-width: 1200px;
 		margin: 0 auto;
+		padding: 0 20px;
 	}
-	
-	.highlight {
-		color: var(--primary-color);
+
+	section {
+		padding: 80px 0;
 	}
-	
-	/* Button styles */
-	.btn-primary, .btn-secondary {
-		display: inline-block;
-		padding: 0.75rem 1.5rem;
-		font-size: 1rem;
-		font-weight: 500;
-		text-align: center;
-		border-radius: 4px;
-		cursor: pointer;
-		transition: all 0.2s;
-		text-decoration: none;
-	}
-	
-	.btn-primary {
-		background-color: var(--primary-color);
-		color: white;
-		border: none;
-	}
-	
-	.btn-primary:hover {
-		background-color: var(--primary-darker);
-	}
-	
-	.btn-secondary {
-		background-color: transparent;
-		color: var(--primary-color);
-		border: 1px solid var(--primary-color);
-	}
-	
-	.btn-secondary:hover {
-		background-color: var(--primary-color);
-		color: white;
-	}
-	
-	.btn-text {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--primary-color);
-		font-weight: 500;
-		text-decoration: none;
-		transition: all 0.2s;
-	}
-	
-	.btn-text:hover {
-		color: var(--primary-darker);
-	}
-	
-	.btn-large {
-		padding: 1rem 2rem;
-		font-size: 1.1rem;
-	}
-	
-	.full-width {
-		width: 100%;
-		display: block;
-	}
-	
-	/* Header styles */
-	.landing-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1.5rem 5%;
-		background-color: var(--bg-primary);
-		position: sticky;
-		top: 0;
-		z-index: 100;
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	}
-	
-	.landing-logo h2 {
-		font-size: 1.75rem;
+
+	h1, h2, h3, h4, h5, h6 {
 		font-weight: 700;
-		color: var(--primary-color);
-		margin: 0;
-	}
-	
-	.landing-nav {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
-	}
-	
-	.landing-nav a {
-		color: var(--text-primary);
-		text-decoration: none;
-		font-weight: 500;
-		transition: color 0.2s;
-	}
-	
-	.landing-nav a:hover {
-		color: var(--primary-color);
-	}
-	
-	/* Hero section */
-	.hero {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 4rem 5%;
-		background-color: var(--bg-primary);
-		min-height: calc(100vh - 80px);
-	}
-	
-	.hero-content {
-		max-width: 600px;
-	}
-	
-	.hero h1 {
-		font-size: 3.5rem;
-		font-weight: 800;
 		line-height: 1.2;
-		margin-bottom: 1.5rem;
-		color: var(--text-primary);
 	}
-	
+
+	h1 {
+		font-size: 3.5rem;
+		margin-bottom: 1.5rem;
+		color: #ffffff;
+		line-height: 1.2;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		font-weight: 800;
+		letter-spacing: -0.5px;
+	}
+
+	h2 {
+		font-size: 2.5rem;
+		margin-bottom: 3rem;
+		text-align: center;
+	}
+
+	.highlight {
+		color: var(--primary);
+	}
+
+	/* Buttons */
+	.cta-button {
+		display: inline-block;
+		background: var(--primary);
+		color: var(--white);
+		padding: 12px 28px;
+		border-radius: 30px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		border: 2px solid var(--primary);
+	}
+
+	.cta-button:hover {
+		background: #e60000;
+		border-color: #e60000;
+		transform: translateY(-2px);
+		box-shadow: 0 10px 20px rgba(255, 0, 0, 0.2);
+	}
+
+	.secondary-button {
+		display: inline-block;
+		background: transparent;
+		color: var(--primary);
+		padding: 12px 28px;
+		border-radius: 30px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		border: 2px solid var(--primary);
+	}
+
+	.secondary-button:hover {
+		background: rgba(255, 0, 0, 0.05);
+		transform: translateY(-2px);
+	}
+
+	/* Hero Section - Dark Design */
+	.hero-section {
+		background: linear-gradient(125deg, #121212 0%, #232323 75%, #2a2a2a 100%);
+		position: relative;
+		overflow: hidden;
+		padding-top: 100px;
+		padding-bottom: 100px;
+		color: #ffffff;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+	}
+
+	.hero-section::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+		opacity: 0.4;
+	}
+
+	.hero-container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+
+	.hero-content {
+		max-width: 580px;
+		padding: 0;
+		position: relative;
+		z-index: 2;
+	}
+
+	.hero-section h1 {
+		font-size: 4rem;
+		margin-bottom: 1.5rem;
+		color: #ffffff;
+		line-height: 1.15;
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+		font-weight: 800;
+		letter-spacing: -0.5px;
+	}
+
+	.hero-section .highlight {
+		background: linear-gradient(90deg, #ff3333, #ff6666);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		text-shadow: none;
+		position: relative;
+		display: inline-block;
+	}
+
+	.hero-section .highlight::after {
+		content: '';
+		position: absolute;
+		bottom: 5px;
+		left: 0;
+		width: 100%;
+		height: 4px;
+		background: linear-gradient(90deg, #ff3333, #ff6666);
+		border-radius: 2px;
+		opacity: 0.3;
+	}
+
 	.hero-subtitle {
 		font-size: 1.25rem;
-		color: var(--text-secondary);
-		margin-bottom: 2.5rem;
+		color: rgba(255, 255, 255, 0.85);
+		margin-bottom: 2.75rem;
+		max-width: 90%;
 		line-height: 1.6;
 	}
-	
-	.hero-cta {
+
+	.hero-buttons {
 		display: flex;
-		align-items: center;
 		gap: 1.5rem;
+		margin-bottom: 3.5rem;
 	}
-	
+
+	.hero-section .cta-button {
+		display: inline-block;
+		background: #ff0000;
+		color: var(--white);
+		padding: 1rem 2rem;
+		border-radius: 30px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		border: none;
+		box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3);
+		font-size: 1.1rem;
+		position: relative;
+		overflow: hidden;
+		z-index: 1;
+	}
+
+	.hero-section .cta-button::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, #ff3333, #ff0000);
+		z-index: -1;
+		transition: transform 0.3s ease;
+	}
+
+	.hero-section .cta-button:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 14px 28px rgba(255, 0, 0, 0.4);
+	}
+
+	.hero-section .cta-button:hover::before {
+		transform: translateX(5%) scale(1.05);
+	}
+
+	.hero-section .secondary-button {
+		display: inline-block;
+		background: transparent;
+		color: var(--white);
+		padding: 0.95rem 2rem;
+		border-radius: 30px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		border: 2px solid rgba(255, 255, 255, 0.2);
+		font-size: 1.1rem;
+	}
+
+	.hero-section .secondary-button:hover {
+		background: rgba(255, 255, 255, 0.08);
+		transform: translateY(-3px);
+		border-color: rgba(255, 255, 255, 0.4);
+	}
+
+	.hero-stats {
+		display: flex;
+		gap: 2.5rem;
+	}
+
+	.stat {
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		padding-left: 0.5rem;
+	}
+
+	.stat::before {
+		content: '';
+		position: absolute;
+		left: -10px;
+		top: 0;
+		bottom: 0;
+		width: 3px;
+		background: linear-gradient(to bottom, #ff3333, #ff6666);
+		border-radius: 3px;
+		opacity: 0.7;
+	}
+
+	.stat-number {
+		font-size: 2.5rem;
+		font-weight: 800;
+		color: #ff3333;
+		line-height: 1.1;
+		margin-bottom: 0.25rem;
+	}
+
+	.stat-text {
+		font-size: 1rem;
+		color: rgba(255, 255, 255, 0.85);
+		font-weight: 500;
+	}
+
 	.hero-image {
-		flex: 0 0 45%;
+		position: relative;
+		width: 50%;
 		max-width: 600px;
+		z-index: 1;
 	}
-	
-	.hero-image img {
+
+	.hero-image-frame {
+		position: relative;
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+					0 0 0 1px rgba(255, 255, 255, 0.1),
+					0 0 0 5px rgba(255, 255, 255, 0.05);
+		transform: perspective(1000px) rotateY(-5deg);
+		transition: all 0.5s ease;
+	}
+
+	.hero-image-frame:hover {
+		transform: perspective(1000px) rotateY(-2deg) translateY(-5px);
+	}
+
+	.hero-image-frame img {
 		width: 100%;
 		height: auto;
-		border-radius: 8px;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+		display: block;
 	}
-	
-	/* Features section */
-	.features {
-		padding: 5rem 5%;
-		background-color: var(--bg-secondary);
+
+	@media (max-width: 992px) {
+		.hero-container {
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.hero-content {
+			max-width: 100%;
+			padding: 0 1rem;
+		}
+
+		.hero-subtitle {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.hero-stats {
+			justify-content: center;
+		}
+
+		.hero-image {
+			width: 85%;
+			margin-top: 3rem;
+		}
+
+		.hero-buttons {
+			justify-content: center;
+		}
 	}
-	
+
+	/* Problem Section */
+	.problem-section {
+		background-color: var(--white);
+	}
+
+	.problem-cards {
+		display: flex;
+		gap: 30px;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.problem-card {
+		background: var(--gray-100);
+		border-radius: 10px;
+		padding: 30px;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+		flex: 1;
+		min-width: 250px;
+		transition: transform 0.3s ease;
+	}
+
+	.problem-card:hover {
+		transform: translateY(-10px);
+	}
+
+	.problem-icon {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+	}
+
+	/* Features Section */
+	.features-section {
+		background-color: var(--gray-100);
+	}
+
 	.features-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 2rem;
-		margin-top: 3rem;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 30px;
 	}
-	
+
 	.feature-card {
-		background-color: var(--card-bg);
-		border-radius: 8px;
-		padding: 2rem;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		transition: transform 0.3s, box-shadow 0.3s;
+		background: var(--white);
+		border-radius: 10px;
+		padding: 30px;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+		transition: all 0.3s ease;
 	}
-	
+
 	.feature-card:hover {
 		transform: translateY(-5px);
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 	}
-	
+
 	.feature-icon {
+		font-size: 2rem;
+		margin-bottom: 1rem;
+		color: var(--primary);
+	}
+
+	/* How It Works Section */
+	.how-it-works-section {
+		background-color: var(--white);
+	}
+
+	.steps {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 20px;
+	}
+
+	.step {
+		text-align: center;
+		flex: 1;
+		min-width: 200px;
+		max-width: 300px;
+	}
+
+	.step-number {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		width: 60px;
 		height: 60px;
-		background-color: rgba(var(--primary-color-rgb), 0.1);
+		background-color: var(--primary);
+		color: var(--white);
+		font-size: 1.5rem;
+		font-weight: 700;
 		border-radius: 50%;
+		margin: 0 auto 1.5rem;
+	}
+
+	.step-arrow {
+		font-size: 2rem;
+		color: var(--gray-500);
 		display: flex;
 		align-items: center;
-		justify-content: center;
+	}
+
+	/* Testimonials Section */
+	.testimonials-section {
+		background-color: var(--gray-100);
+	}
+
+	.testimonials-slider {
+		display: flex;
+		overflow-x: auto;
+		gap: 30px;
+		padding: 20px 0;
+		scrollbar-width: none;
+	}
+
+	.testimonials-slider::-webkit-scrollbar {
+		display: none;
+	}
+
+	.testimonial {
+		flex: 0 0 350px;
+		background: var(--white);
+		border-radius: 10px;
+		padding: 30px;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+	}
+
+	.testimonial-content {
 		margin-bottom: 1.5rem;
 	}
-	
-	.feature-icon i {
-		font-size: 1.5rem;
-		color: var(--primary-color);
+
+	.testimonial-content p {
+		font-style: italic;
 	}
-	
-	.feature-card h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		margin-bottom: 1rem;
-		color: var(--text-primary);
+
+	.testimonial-author {
+		display: flex;
+		align-items: center;
+		gap: 15px;
 	}
-	
-	.feature-card p {
+
+	.testimonial-author img {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	.testimonial-author h4 {
+		margin: 0;
 		font-size: 1rem;
-		color: var(--text-secondary);
-		line-height: 1.6;
 	}
-	
-	/* Pricing section */
-	.pricing {
-		padding: 5rem 5%;
-		background-color: var(--bg-primary);
+
+	.testimonial-author p {
+		margin: 0;
+		font-size: 0.8rem;
+		color: var(--gray-600);
 	}
-	
+
+	/* Demo Section */
+	.demo-section {
+		background-color: var(--white);
+	}
+
+	.demo-video {
+		aspect-ratio: 16 / 9;
+		margin-bottom: 3rem;
+	}
+
+	.demo-video iframe {
+		width: 100%;
+		height: 100%;
+		border-radius: 10px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	}
+
+	.demo-cta {
+		text-align: center;
+	}
+
+	.demo-cta p {
+		font-size: 1.25rem;
+		margin-bottom: 1.5rem;
+	}
+
+	/* Offer Section */
+	.offer-section {
+		background-color: var(--gray-100);
+	}
+
 	.pricing-cards {
 		display: flex;
 		justify-content: center;
-		gap: 2rem;
-		margin-top: 3rem;
+		gap: 30px;
 		flex-wrap: wrap;
 	}
-	
+
 	.pricing-card {
-		background-color: var(--card-bg);
-		border-radius: 8px;
-		padding: 2.5rem;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		width: 100%;
+		background: var(--white);
+		border-radius: 10px;
+		padding: 40px 30px;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+		flex: 1;
+		min-width: 280px;
 		max-width: 350px;
 		position: relative;
-		transition: transform 0.3s, box-shadow 0.3s;
+		transition: transform 0.3s ease;
 	}
-	
+
 	.pricing-card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+		transform: translateY(-10px);
 	}
-	
+
 	.pricing-card.featured {
-		border: 2px solid var(--primary-color);
+		border: 2px solid var(--primary);
 		transform: scale(1.05);
 	}
-	
+
 	.pricing-card.featured:hover {
-		transform: scale(1.05) translateY(-5px);
+		transform: scale(1.05) translateY(-10px);
 	}
-	
+
 	.pricing-badge {
 		position: absolute;
 		top: -12px;
-		left: 50%;
-		transform: translateX(-50%);
-		background-color: var(--primary-color);
-		color: white;
-		padding: 0.35rem 1.5rem;
+		right: 20px;
+		background: var(--primary);
+		color: var(--white);
+		padding: 5px 15px;
 		border-radius: 20px;
 		font-size: 0.8rem;
 		font-weight: 600;
 	}
-	
+
 	.pricing-header {
 		text-align: center;
-		padding-bottom: 1.5rem;
-		margin-bottom: 1.5rem;
-		border-bottom: 1px solid var(--border-color);
+		margin-bottom: 2rem;
 	}
-	
-	.pricing-header h3 {
-		font-size: 1.75rem;
+
+	.price {
+		display: flex;
+		justify-content: center;
+		align-items: baseline;
+		gap: 5px;
+		margin-top: 1rem;
+	}
+
+	.currency {
+		font-size: 1.5rem;
 		font-weight: 700;
-		color: var(--text-primary);
-		margin-bottom: 1rem;
 	}
-	
-	.pricing-header .price {
+
+	.amount {
 		font-size: 3rem;
 		font-weight: 700;
-		color: var(--primary-color);
-		margin-bottom: 0.5rem;
+		line-height: 1;
 	}
-	
-	.pricing-header .price span {
+
+	.period {
 		font-size: 1rem;
-		font-weight: 500;
-		color: var(--text-secondary);
+		color: var(--gray-600);
 	}
-	
-	.pricing-header p {
-		font-size: 1rem;
-		color: var(--text-secondary);
-	}
-	
+
 	.pricing-features {
 		list-style: none;
 		padding: 0;
-		margin: 0 0 2rem 0;
+		margin: 0 0 2rem;
 	}
-	
+
 	.pricing-features li {
-		display: flex;
-		align-items: center;
-		padding: 0.75rem 0;
-		font-size: 1rem;
-		color: var(--text-primary);
+		padding: 10px 0;
+		border-bottom: 1px solid var(--gray-200);
+		position: relative;
+		padding-left: 30px;
 	}
-	
-	.pricing-features li i {
-		margin-right: 1rem;
-		font-size: 1rem;
+
+	.pricing-features li::before {
+		content: "✓";
+		position: absolute;
+		left: 0;
+		color: var(--secondary);
 	}
-	
-	.pricing-features li i.fa-check {
-		color: #4caf50;
+
+	.pricing-button {
+		display: block;
+		text-align: center;
+		background: var(--primary);
+		color: var(--white);
+		padding: 12px;
+		border-radius: 30px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.3s ease;
 	}
-	
-	.pricing-features li i.fa-times {
-		color: #e53935;
+
+	.pricing-button:hover {
+		background: #e60000;
+		transform: translateY(-2px);
 	}
-	
-	/* FAQ section */
-	.faq {
-		padding: 5rem 5%;
-		background-color: var(--bg-secondary);
+
+	/* FAQ Section */
+	.faq-section {
+		background-color: var(--white);
 	}
-	
+
 	.faq-list {
 		max-width: 800px;
 		margin: 0 auto;
 	}
-	
+
 	.faq-item {
-		background-color: var(--card-bg);
-		border-radius: 8px;
+		border-bottom: 1px solid var(--gray-300);
 		margin-bottom: 1rem;
-		overflow: hidden;
 	}
-	
+
 	.faq-question {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1.5rem;
 		cursor: pointer;
+		padding: 1rem 0;
 	}
-	
+
 	.faq-question h3 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		color: var(--text-primary);
 		margin: 0;
+		font-size: 1.25rem;
 	}
-	
+
 	.faq-toggle {
-		background: none;
-		border: none;
-		color: var(--text-secondary);
-		font-size: 1rem;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 30px;
-		height: 30px;
-		border-radius: 50%;
-		transition: background-color 0.2s;
+		font-size: 1.5rem;
+		color: var(--primary);
 	}
-	
-	.faq-toggle:hover {
-		background-color: rgba(var(--primary-color-rgb), 0.1);
-		color: var(--primary-color);
-	}
-	
+
 	.faq-answer {
-		height: 0;
+		max-height: 0;
 		overflow: hidden;
-		transition: height 0.3s ease-out;
-		padding: 0 1.5rem;
+		transition: max-height 0.3s ease;
 	}
-	
+
 	.faq-item.active .faq-answer {
-		height: auto;
-		padding: 0 1.5rem 1.5rem;
+		max-height: 1000px;
+		padding-bottom: 1rem;
 	}
-	
-	.faq-answer p {
-		color: var(--text-secondary);
-		line-height: 1.6;
-		margin: 0;
+
+	.faq-item.active .faq-toggle {
+		transform: rotate(45deg);
 	}
-	
-	/* CTA section */
+
+	/* CTA Section */
 	.cta-section {
-		padding: 5rem 5%;
-		background-color: var(--primary-color);
+		background: linear-gradient(135deg, var(--primary) 0%, #cc0000 100%);
+		color: var(--white);
 		text-align: center;
-		color: white;
 	}
-	
+
 	.cta-section h2 {
-		font-size: 2.5rem;
-		font-weight: 700;
-		margin-bottom: 1rem;
+		color: var(--white);
 	}
-	
+
+	.cta-section .highlight {
+		color: var(--accent);
+	}
+
 	.cta-section p {
-		font-size: 1.2rem;
+		font-size: 1.25rem;
 		margin-bottom: 2rem;
-		max-width: 600px;
+		max-width: 700px;
 		margin-left: auto;
 		margin-right: auto;
 	}
-	
-	.cta-section .btn-primary {
-		background-color: white;
-		color: var(--primary-color);
+
+	.cta-buttons {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
 	}
-	
-	.cta-section .btn-primary:hover {
-		background-color: rgba(255, 255, 255, 0.9);
+
+	.cta-section .cta-button {
+		background: var(--white);
+		color: var(--primary);
+		border-color: var(--white);
 	}
-	
+
+	.cta-section .cta-button:hover {
+		background: rgba(255, 255, 255, 0.9);
+		border-color: rgba(255, 255, 255, 0.9);
+	}
+
+	.cta-section .secondary-button {
+		color: var(--white);
+		border-color: var(--white);
+	}
+
+	.cta-section .secondary-button:hover {
+		background: rgba(255, 255, 255, 0.1);
+	}
+
 	/* Footer */
 	.landing-footer {
-		background-color: var(--bg-primary);
-		padding: 5rem 5% 2rem;
+		background-color: var(--gray-900);
+		color: var(--gray-400);
+		padding: 60px 0 30px;
 	}
-	
+
+	.footer-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 40px;
+		margin-bottom: 40px;
+	}
+
+	.footer-brand {
+		grid-column: span 2;
+	}
+
 	.footer-logo {
-		margin-bottom: 3rem;
-	}
-	
-	.footer-logo h2 {
-		font-size: 1.75rem;
-		font-weight: 700;
-		color: var(--primary-color);
-		margin-bottom: 0.5rem;
-	}
-	
-	.footer-logo p {
-		color: var(--text-secondary);
-	}
-	
-	.footer-links {
-		display: flex;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		margin-bottom: 3rem;
-		gap: 2rem;
-	}
-	
-	.footer-column {
-		min-width: 150px;
-	}
-	
-	.footer-column h3 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		color: var(--text-primary);
+		height: auto;
+		width: 150px;
 		margin-bottom: 1rem;
 	}
-	
-	.footer-column a {
-		display: block;
-		color: var(--text-secondary);
-		margin-bottom: 0.75rem;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
-	
-	.footer-column a:hover {
-		color: var(--primary-color);
-	}
-	
-	.footer-bottom {
+
+	.social-icons {
 		display: flex;
-		justify-content: space-between;
+		gap: 15px;
+		margin-top: 1.5rem;
+	}
+
+	.social-icons a {
+		display: flex;
+		justify-content: center;
 		align-items: center;
-		padding-top: 2rem;
-		border-top: 1px solid var(--border-color);
-	}
-	
-	.footer-bottom p {
-		color: var(--text-secondary);
-		font-size: 0.9rem;
-	}
-	
-	.social-links {
-		display: flex;
-		gap: 1rem;
-	}
-	
-	.social-links a {
 		width: 36px;
 		height: 36px;
+		background: rgba(255, 255, 255, 0.1);
+		color: var(--white);
 		border-radius: 50%;
-		background-color: rgba(var(--primary-color-rgb), 0.1);
-		color: var(--primary-color);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: all 0.2s;
+		transition: all 0.3s ease;
+	}
+
+	.social-icons a:hover {
+		background: var(--primary);
+		transform: translateY(-3px);
+	}
+
+	.footer-links h4 {
+		color: var(--white);
+		margin-bottom: 1.5rem;
+		font-size: 1.2rem;
+	}
+
+	.footer-links ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.footer-links li {
+		margin-bottom: 0.75rem;
+	}
+
+	.footer-links a {
+		color: var(--gray-400);
 		text-decoration: none;
+		transition: color 0.3s ease;
 	}
-	
-	.social-links a:hover {
-		background-color: var(--primary-color);
-		color: white;
+
+	.footer-links a:hover {
+		color: var(--primary);
 	}
-	
-	/* Responsive styles */
-	@media (max-width: 1024px) {
-		.hero {
-			flex-direction: column;
-			text-align: center;
-			gap: 3rem;
+
+	.footer-bottom {
+		text-align: center;
+		padding-top: 30px;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		font-size: 0.9rem;
+	}
+
+	/* Responsive Styles */
+	@media (max-width: 992px) {
+		h1 {
+			font-size: 2.8rem;
+		}
+		
+		h2 {
+			font-size: 2.2rem;
+		}
+		
+		.hero-image {
+			position: relative;
+			width: 100%;
+			transform: none;
+			top: 0;
+			margin-top: 30px;
 		}
 		
 		.hero-content {
 			max-width: 100%;
+			text-align: center;
+			padding: 40px 0 0;
 		}
 		
-		.hero-cta {
+		.hero-buttons, .hero-stats {
 			justify-content: center;
-		}
-		
-		.hero h1 {
-			font-size: 2.75rem;
-		}
-		
-		.pricing-cards {
-			flex-direction: column;
-			align-items: center;
 		}
 		
 		.pricing-card.featured {
@@ -841,41 +1268,49 @@ import { getSession, SESSION_KEY } from '../utils/authUtils';
 		}
 		
 		.pricing-card.featured:hover {
-			transform: translateY(-5px);
+			transform: translateY(-10px);
 		}
 	}
-	
+
 	@media (max-width: 768px) {
-		.landing-header {
+		section {
+			padding: 60px 0;
+		}
+		
+		h1 {
+			font-size: 2.2rem;
+		}
+		
+		h2 {
+			font-size: 1.8rem;
+			margin-bottom: 2rem;
+		}
+		
+		.step-arrow {
+			transform: rotate(90deg);
+			margin: 10px 0;
+		}
+		
+		.footer-brand {
+			grid-column: span 1;
+		}
+	}
+
+	@media (max-width: 576px) {
+		.hero-stats {
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+		}
+		
+		.hero-buttons {
 			flex-direction: column;
 			gap: 1rem;
 		}
 		
-		.landing-nav {
-			flex-wrap: wrap;
-			justify-content: center;
-		}
-		
-		.section-header h2 {
-			font-size: 2rem;
-		}
-		
-		.hero h1 {
-			font-size: 2.25rem;
-		}
-		
-		.hero-subtitle {
-			font-size: 1.1rem;
-		}
-		
-		.cta-section h2 {
-			font-size: 2rem;
-		}
-		
-		.footer-bottom {
+		.cta-buttons {
 			flex-direction: column;
 			gap: 1rem;
-			text-align: center;
 		}
 	}
 </style> 

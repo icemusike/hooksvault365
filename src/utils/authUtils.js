@@ -142,9 +142,12 @@ const getLocalDemoSession = () => {
     const localSession = JSON.parse(sessionData);
 
     // Validate essential fields and demo user status
-    if (localSession?.isLoggedIn && localSession?.email === DEMO_USER.email && localSession?.isDemoUser) {
+    if (localSession?.isLoggedIn && localSession?.email === DEMO_USER.email) {
       console.log('[getLocalDemoSession] Valid local demo session found.');
-      return localSession;
+      return {
+        ...localSession,
+        isDemoUser: true // Ensure the isDemoUser flag is set
+      };
     }
   } catch (e) {
     console.error('[getLocalDemoSession] Error parsing local session:', e);
@@ -163,18 +166,64 @@ const getLocalDemoSession = () => {
  */
 export const loginUser = async (email, password) => {
   try {
-    // Demo Login Check (remains the same)
+    // Demo Login Check
     if (email === DEMO_USER.email && password === DEMO_USER.password) {
-       // ... (demo login logic as before) ...
-       return {
-         success: true,
-         message: 'Demo login successful',
-         user: {
-           email: DEMO_USER.email,
-           name: DEMO_USER.name,
-           isDemoUser: true
-         }
-       };
+      console.log('[loginUser] Attempting demo login');
+      
+      try {
+        // First try using the API endpoint
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          console.log('[loginUser] Demo login API response:', result);
+          
+          // Store session in localStorage as a fallback
+          const sessionData = {
+            email: DEMO_USER.email,
+            name: DEMO_USER.name,
+            isLoggedIn: true,
+            isDemoUser: true,
+            timestamp: Date.now()
+          };
+          
+          localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+          
+          return result;
+        } else {
+          console.warn('[loginUser] Demo login API request failed, using fallback');
+        }
+      } catch (apiError) {
+        console.error('[loginUser] Error with API login:', apiError);
+        // Continue with fallback login
+      }
+      
+      // Fallback to local storage if API fails
+      const sessionData = {
+        email: DEMO_USER.email,
+        name: DEMO_USER.name,
+        isLoggedIn: true,
+        isDemoUser: true,
+        timestamp: Date.now()
+      };
+      
+      localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+      
+      return {
+        success: true,
+        message: 'Demo login successful',
+        user: {
+          email: DEMO_USER.email,
+          name: DEMO_USER.name,
+          isDemoUser: true
+        }
+      };
     }
     
     // Supabase Login

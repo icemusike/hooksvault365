@@ -1,0 +1,132 @@
+---
+import '../styles/global.css';
+import { initializeTheme } from '../utils/themeUtils';
+import NotificationSystem from '../components/NotificationSystem.jsx';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="HookVault - Generate High-Converting YouTube Hooks with AI">
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		
+		<!-- Theme initialization script -->
+		<script is:inline>
+			// Theme initialization
+			(function() {
+				// Check if user wants to remember theme preference
+				const rememberTheme = localStorage.getItem('remember_theme') !== 'false';
+				
+				// Landing page always uses light theme for consistent marketing experience
+				const theme = 'light';
+				
+				// Apply theme class to document
+				document.documentElement.classList.remove('light', 'dark');
+				document.documentElement.classList.add(theme);
+				
+				// Apply CSS variables based on theme
+				const themeVars = {
+					'light': {
+						'--bg-primary': '#ffffff',
+						'--bg-secondary': '#f7f7f7',
+						'--text-primary': '#1a1a1a',
+						'--text-secondary': '#5c5c5c',
+						'--border-color': '#e0e0e0',
+						'--accent': '195, 27, 27',
+						'--accent-dark': '166, 22, 22',
+						'--accent-light': '249, 224, 224',
+						'--accent-text': '255, 255, 255',
+						'--accent-gradient': 'linear-gradient(45deg, rgb(var(--accent)), rgb(var(--accent-dark)) 30%, rgb(var(--accent-light)) 60%)',
+						'--success': '#10b981',
+						'--error': '#ef4444',
+						'--warning': '#f59e0b',
+						'--info': '#3b82f6',
+						'--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04)',
+						'--input-bg': '#f9fafb'
+					}
+				};
+				
+				// Apply CSS variables
+				const activeThemeVars = themeVars[theme];
+				for (const [property, value] of Object.entries(activeThemeVars)) {
+					document.documentElement.style.setProperty(property, value);
+				}
+			})();
+		</script>
+	</head>
+	<body>
+		<slot />
+		
+		<!-- Notification System -->
+		<NotificationSystem client:load />
+	</body>
+</html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set up FAQ functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      
+      question.addEventListener('click', () => {
+        // Close all other FAQs
+        faqItems.forEach(otherItem => {
+          if (otherItem !== item && otherItem.classList.contains('active')) {
+            otherItem.classList.remove('active');
+          }
+        });
+        
+        // Toggle this FAQ
+        item.classList.toggle('active');
+      });
+    });
+    
+    // Check authentication status to customize login/signup buttons
+    const checkAuth = async () => {
+      try {
+        // Import dynamically to avoid SSR issues
+        const { getSession } = await import('../utils/authUtils');
+        const session = await getSession();
+        
+        if (session?.isLoggedIn) {
+          // User is logged in - update CTAs to go to dashboard
+          document.querySelectorAll('a[href="/register"]').forEach(link => {
+            link.href = '/dashboard';
+            link.textContent = 'Go to Dashboard';
+          });
+          
+          document.querySelectorAll('a[href="/login"]').forEach(link => {
+            link.href = '/dashboard';
+            link.textContent = 'Dashboard';
+          });
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+      }
+    };
+    
+    checkAuth();
+  });
+</script>
+
+<style is:global>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+  }
+</style> 

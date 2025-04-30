@@ -11,7 +11,6 @@ export default defineConfig({
     mode: 'standalone'
   }),
   redirects: {
-    // Remove the line below to allow authenticated users to access the dashboard
-    // '/': '/landing'
+    '/': '/landing'
   }
 });

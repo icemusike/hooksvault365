@@ -3,7 +3,7 @@ export const prerender = false;
 
 export async function POST({ request }) {
   try {
-    const { prompt, niche, tone, count } = await request.json();
+    const { prompt, niche, tone, count, model } = await request.json();
     
     // Get API key from request header
     const apiKey = request.headers.get('x-openai-key');
@@ -24,6 +24,9 @@ export async function POST({ request }) {
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
+
+    // Use provided model or default to gpt-3.5-turbo
+    const selectedModel = model || "gpt-3.5-turbo";
 
     // Construct a detailed prompt for OpenAI
     const systemPrompt = `You are an expert copywriter specializing in creating compelling hook sentences that grab attention.
@@ -47,7 +50,7 @@ export async function POST({ request }) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: selectedModel,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
@@ -76,7 +79,8 @@ export async function POST({ request }) {
         niche,
         tone,
         length: text.length < 50 ? "short" : text.length > 100 ? "long" : "medium",
-        ai_generated: true
+        ai_generated: true,
+        model: selectedModel // Include the model used for generation
       }));
 
     return new Response(

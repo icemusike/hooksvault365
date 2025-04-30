@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="100" fill="#009688" fill-opacity="0.1"/>
+  <circle cx="100" cy="100" r="98" stroke="#009688" stroke-opacity="0.5" stroke-width="4"/>
+  
+  <!-- Simple avatar -->
+  <circle cx="100" cy="80" r="40" fill="#009688" fill-opacity="0.6"/>
+  <path d="M100 140 C65 140 60 170 60 170 L140 170 C140 170 135 140 100 140 Z" fill="#009688" fill-opacity="0.6"/>
+</svg> 

@@ -263,8 +263,10 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 <style>
 	.login-container {
 		width: 100%;
-		max-height: 100%;
-		overflow-y: auto;
+		background-color: var(--bg-primary);
+		border-radius: 12px;
+		box-shadow: var(--card-shadow);
+		padding: 1.5rem;
 	}
 	
 	.login-header {
@@ -273,26 +275,27 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 	}
 	
 	.login-header h2 {
-		font-size: 1.8rem;
+		font-size: 1.5rem;
 		font-weight: 700;
-		margin-bottom: 0.25rem;
 		color: var(--text-primary);
+		margin-bottom: 0.25rem;
 	}
 	
 	.login-header p {
 		color: var(--text-secondary);
-		font-size: 1rem;
+		font-size: 0.9rem;
 	}
 	
 	.login-instructions {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background-color: rgba(var(--accent), 0.1);
-		border-left: 3px solid rgb(var(--accent));
 		padding: 0.5rem 0.75rem;
-		border-radius: 0.25rem;
+		background-color: rgba(var(--accent), 0.1);
+		color: rgb(var(--accent));
+		border-radius: 8px;
 		margin-bottom: 1rem;
+		font-size: 0.85rem;
 	}
 	
 	.login-instructions i {
@@ -310,8 +313,8 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 	.social-login {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
 	}
 	
 	.social-btn {
@@ -321,46 +324,61 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 		gap: 0.75rem;
 		width: 100%;
 		padding: 0.75rem;
-		border-radius: 6px;
+		border-radius: 8px;
+		background-color: var(--bg-primary);
 		border: 1px solid var(--border-color);
-		background-color: transparent;
-		color: var(--text-primary);
-		font-size: 0.9rem;
 		font-weight: 500;
+		font-size: 0.95rem;
 		cursor: pointer;
-		transition: all 0.2s;
+		transition: all 0.2s ease;
 	}
 	
 	.social-btn:hover {
-		background-color: var(--hover-bg);
+		background-color: var(--bg-secondary);
 	}
 	
-	.social-btn.google:hover {
-		border-color: #4285F4;
-		color: #4285F4;
+	.social-btn.google {
+		color: #ea4335;
 	}
 	
-	.social-btn.github:hover {
-		border-color: #333;
-		color: #333;
+	.social-btn.github {
+		color: #24292e;
+	}
+	
+	.auth-separator {
+		display: flex;
+		align-items: center;
+		margin: 1.5rem 0;
+		font-size: 0.85rem;
+		color: var(--text-secondary);
+	}
+	
+	.auth-separator::before, 
+	.auth-separator::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background-color: var(--border-color);
+	}
+	
+	.auth-separator span {
+		padding: 0 1rem;
 	}
 	
 	.auth-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
+		margin-bottom: 1.5rem;
 	}
 	
 	.form-group {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
+		margin-bottom: 1rem;
 	}
 	
 	.form-group label {
-		font-size: 0.9rem;
+		display: block;
+		margin-bottom: 0.5rem;
 		font-weight: 500;
-		color: var(--text-secondary);
+		font-size: 0.9rem;
+		color: var(--text-primary);
 	}
 	
 	.input-with-icon {
@@ -373,27 +391,31 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 		top: 50%;
 		transform: translateY(-50%);
 		color: var(--text-secondary);
+		font-size: 1rem;
 	}
 	
 	.input-with-icon input {
 		width: 100%;
-		padding: 0.9rem 1rem 0.9rem 2.75rem;
-		font-size: 1rem;
+		padding: 0.75rem 1rem 0.75rem 2.75rem;
+		border-radius: 8px;
 		border: 1px solid var(--border-color);
-		border-radius: 6px;
 		background-color: var(--input-bg);
 		color: var(--text-primary);
-		transition: all 0.2s;
+		font-size: 0.95rem;
+		transition: all 0.3s ease;
 	}
 	
 	.input-with-icon input:focus {
-		border-color: rgb(var(--accent));
-		box-shadow: 0 0 0 4px rgba(var(--accent), 0.2);
 		outline: none;
-		background-color: white;
+		border-color: rgb(var(--accent));
+		box-shadow: 0 0 0 2px rgba(var(--accent), 0.2);
 	}
 	
-	.password-input button {
+	.password-input {
+		position: relative;
+	}
+	
+	#toggle-password {
 		position: absolute;
 		right: 1rem;
 		top: 50%;
@@ -402,11 +424,8 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 		border: none;
 		color: var(--text-secondary);
 		cursor: pointer;
+		padding: 0.25rem;
 		font-size: 1rem;
-	}
-	
-	.password-input button:hover {
-		color: rgb(var(--accent));
 	}
 	
 	.password-options {
@@ -414,6 +433,7 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 		justify-content: space-between;
 		align-items: center;
 		margin-top: 0.75rem;
+		font-size: 0.85rem;
 	}
 	
 	.remember-me {
@@ -422,99 +442,66 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 		gap: 0.5rem;
 	}
 	
-	.remember-me label {
-		font-size: 0.85rem;
-		cursor: pointer;
+	.remember-me input[type="checkbox"] {
+		width: 1rem;
+		height: 1rem;
+		accent-color: rgb(var(--accent));
 	}
 	
 	.forgot-password {
-		font-size: 0.85rem;
 		color: rgb(var(--accent));
 		text-decoration: none;
-		font-weight: 500;
-		transition: all 0.2s;
+		transition: all 0.2s ease;
 	}
 	
 	.forgot-password:hover {
 		text-decoration: underline;
-		color: rgb(var(--accent-dark));
 	}
 	
 	.form-actions {
-		margin-top: 1rem;
-		animation: fadeInButton 0.5s ease-out forwards;
-	}
-	
-	@keyframes fadeInButton {
-		from {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-	
-	@keyframes buttonPulse {
-		0% {
-			box-shadow: 0 6px 15px rgba(var(--accent), 0.4);
-		}
-		50% {
-			box-shadow: 0 6px 25px rgba(var(--accent), 0.65);
-		}
-		100% {
-			box-shadow: 0 6px 15px rgba(var(--accent), 0.4);
-		}
+		margin-top: 1.25rem;
 	}
 	
 	.btn-primary {
 		width: 100%;
-		padding: 0.75rem;
-		font-size: 1rem;
-		font-weight: 700;
-		background-color: rgb(var(--accent));
-		color: white;
-		border: none;
+		padding: 0.85rem;
 		border-radius: 8px;
+		border: none;
+		background: linear-gradient(135deg, #ff0000, #cc0000);
+		color: white;
+		font-weight: 600;
+		font-size: 1rem;
 		cursor: pointer;
-		transition: all 0.3s;
-		box-shadow: 0 6px 15px rgba(var(--accent), 0.4);
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
 		position: relative;
 		overflow: hidden;
-		letter-spacing: 0.5px;
-		margin-top: 0.5rem;
-		animation: buttonPulse 2s infinite ease-in-out;
+	}
+	
+	.btn-primary::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, #ff3333, #cc0000);
+		opacity: 0;
+		transition: opacity 0.3s ease;
 	}
 	
 	.btn-primary:hover {
-		background-color: rgb(var(--accent-dark));
-		transform: translateY(-3px);
-		box-shadow: 0 8px 20px rgba(var(--accent), 0.5);
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(255, 0, 0, 0.3);
 	}
 	
-	.btn-primary:active {
-		transform: translateY(-1px);
-		box-shadow: 0 4px 10px rgba(var(--accent), 0.4);
+	.btn-primary:hover::before {
+		opacity: 1;
 	}
 	
-	.auth-separator {
-		display: flex;
-		align-items: center;
-		margin: 1rem 0;
-	}
-	
-	.auth-separator::before,
-	.auth-separator::after {
-		content: '';
-		flex: 1;
-		border-bottom: 1px solid var(--border-color);
-	}
-	
-	.auth-separator span {
-		padding: 0 1rem;
-		font-size: 0.875rem;
-		color: var(--text-secondary);
+	.btn-primary i, .btn-primary span {
+		position: relative;
+		z-index: 1;
 	}
 	
 	.auth-links {
@@ -524,105 +511,85 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 	
 	.btn-secondary {
 		display: inline-block;
-		padding: 0.9rem 2rem;
-		font-size: 1rem;
-		font-weight: 500;
-		text-align: center;
-		background-color: transparent;
-		color: rgb(var(--accent));
-		border: 1px solid rgb(var(--accent));
+		padding: 0.75rem 1.5rem;
 		border-radius: 8px;
+		border: 2px solid #ff0000;
+		background-color: transparent;
+		color: #ff0000;
+		font-weight: 600;
+		font-size: 0.95rem;
 		cursor: pointer;
-		transition: all 0.3s;
+		transition: all 0.3s ease;
 		text-decoration: none;
-		box-shadow: 0 2px 6px rgba(var(--accent), 0.2);
+		text-align: center;
 	}
 	
 	.btn-secondary:hover {
-		background-color: rgba(var(--accent), 0.1);
+		background-color: rgba(255, 0, 0, 0.05);
 		transform: translateY(-2px);
-		box-shadow: 0 4px 10px rgba(var(--accent), 0.25);
-	}
-	
-	.btn-secondary:active {
-		transform: translateY(0);
-		box-shadow: 0 2px 5px rgba(var(--accent), 0.15);
 	}
 	
 	.form-message {
 		margin-top: 1rem;
 		padding: 0.75rem;
-		border-radius: 6px;
+		border-radius: 8px;
 		font-size: 0.9rem;
 		text-align: center;
+		min-height: 2.5rem;
 	}
 	
 	.form-message.error {
 		background-color: rgba(255, 0, 0, 0.1);
-		color: #e53935;
-		border: 1px solid rgba(229, 57, 53, 0.3);
+		color: #ff0000;
 	}
 	
 	.form-message.success {
-		background-color: rgba(76, 175, 80, 0.1);
-		color: #43a047;
-		border: 1px solid rgba(67, 160, 71, 0.3);
+		background-color: rgba(16, 185, 129, 0.1);
+		color: #10b981;
 	}
 	
 	.demo-credentials {
-		margin-top: 0.75rem;
-		padding: 0.75rem;
-		background-color: rgba(var(--accent), 0.05);
+		margin-top: 1.5rem;
+		padding: 1rem;
 		border-radius: 8px;
-		font-size: 0.85rem;
-		text-align: center;
-		border: 1px dashed rgba(var(--accent), 0.3);
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
+		background-color: rgba(255, 0, 0, 0.05);
+		border: 1px dashed rgba(255, 0, 0, 0.3);
 	}
 	
 	.demo-header {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
-		gap: 0.5rem;
+		align-items: center;
+		margin-bottom: 0.75rem;
 	}
 	
 	.demo-header p {
-		font-weight: 600;
-		margin: 0;
+		font-size: 0.9rem;
 		color: var(--text-primary);
-		flex-shrink: 0;
+		font-weight: 500;
+		margin: 0;
 	}
 	
 	.demo-login-btn {
 		display: flex;
 		align-items: center;
-		justify-content: center;
 		gap: 0.5rem;
-		flex-grow: 1;
-		padding: 0.6rem;
-		border-radius: 8px;
-		background-color: rgb(var(--accent));
-		color: white;
+		padding: 0.5rem 1rem;
+		border-radius: 6px;
 		border: none;
-		font-size: 0.9rem;
-		font-weight: 600;
+		background: linear-gradient(135deg, #ff3333, #cc0000);
+		color: white;
+		font-weight: 500;
+		font-size: 0.85rem;
 		cursor: pointer;
-		transition: all 0.3s;
-		box-shadow: 0 4px 8px rgba(var(--accent), 0.3);
+		transition: all 0.2s ease;
+		box-shadow: 0 2px 6px rgba(255, 0, 0, 0.2);
 	}
 	
 	.demo-login-btn:hover {
-		background-color: rgb(var(--accent-dark));
-		transform: translateY(-2px);
-		box-shadow: 0 6px 12px rgba(var(--accent), 0.4);
-	}
-	
-	.demo-login-btn:active {
-		transform: translateY(0);
-		box-shadow: 0 4px 6px rgba(var(--accent), 0.3);
+		background: linear-gradient(135deg, #ff4d4d, #e60000);
+		transform: translateY(-1px);
+		box-shadow: 0 3px 8px rgba(255, 0, 0, 0.3);
 	}
 	
 	.demo-info {
@@ -631,11 +598,25 @@ import { DEMO_USER, SESSION_KEY } from '../utils/authUtils';
 	
 	.demo-creds {
 		display: flex;
-		justify-content: space-between;
-		color: var(--text-primary);
+		flex-direction: column;
+		gap: 0.5rem;
 	}
 	
-	.demo-creds span {
-		font-family: monospace;
+	@media (max-width: 576px) {
+		.login-container {
+			padding: 1.5rem;
+		}
+		
+		.password-options {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.75rem;
+		}
+		
+		.demo-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.75rem;
+		}
 	}
 </style> 

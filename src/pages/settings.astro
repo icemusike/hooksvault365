@@ -65,6 +65,21 @@ import supabase from '../utils/supabaseClient';
               <div id="openai-validation-status" class="validation-status"></div>
               <p class="input-help">Used for AI-generated hook suggestions and variations.</p>
             </div>
+            
+            <div class="form-group">
+              <label for="openai-model">OpenAI Model</label>
+              <div class="model-selection-container">
+                <select id="openai-model" class="setting-input model-dropdown" disabled>
+                  <option value="">Loading models...</option>
+                </select>
+                <button id="refresh-models" class="refresh-models-btn" title="Refresh available models">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+              </div>
+              <div id="model-info" class="model-info"></div>
+              <p class="input-help">Select the AI model to use for generating hooks. More capable models may produce better results but can be more expensive.</p>
+            </div>
+            
             <div class="form-group">
               <label for="google-api-key">Google Sheets API Key (Coming Soon)</label>
               <div class="api-key-input">
@@ -248,20 +263,20 @@ import supabase from '../utils/supabaseClient';
   
   .toggle-visibility {
     position: absolute;
-    right: 1rem;
+    right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--text-secondary);
     cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 1rem;
     padding: 0.25rem;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
   }
   
   .toggle-visibility:hover {
-    opacity: 1;
+    color: rgb(var(--accent));
   }
   
   .input-help {
@@ -669,6 +684,51 @@ import supabase from '../utils/supabaseClient';
     color: var(--error);
     font-weight: 500;
   }
+
+  .model-selection-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .model-dropdown {
+    flex: 1;
+  }
+  
+  .refresh-models-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .refresh-models-btn:hover {
+    background: var(--bg-primary);
+    color: rgb(var(--accent));
+    border-color: rgb(var(--accent));
+  }
+  
+  .refresh-models-btn i.fa-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  .model-info {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 </style>
 
 <script>
@@ -677,380 +737,277 @@ import supabase from '../utils/supabaseClient';
   import { getSession } from '../utils/authUtils';
   import supabase from '../utils/supabaseClient';
 
-  // Tab Switching Logic
-  const tabs = document.querySelectorAll('.tab-button');
-  const panes = document.querySelectorAll('.tab-pane');
-
-  const switchToTab = (targetId) => {
-    // Deactivate all tabs and panes
-    tabs.forEach(t => t.classList.remove('active'));
-    panes.forEach(p => p.classList.remove('active'));
-    
-    // Activate the target tab and pane
-    const targetTab = document.querySelector(`[data-tab="${targetId}"]`);
-    if (targetTab) {
-      targetTab.classList.add('active');
-      document.getElementById(targetId).classList.add('active');
-    }
-  };
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const targetId = tab.getAttribute('data-tab');
-      switchToTab(targetId);
-    });
-  });
-
-  // Check if we need to open a specific tab on page load
-  document.addEventListener('DOMContentLoaded', () => {
-    // Check for tab in URL hash
-    const hash = window.location.hash.substring(1);
-    if (hash && document.getElementById(hash)) {
-      switchToTab(hash);
-    } 
-    // Check for tab in session storage (from AI hook generator)
-    else {
-      const targetTab = sessionStorage.getItem('open_settings_tab');
-      if (targetTab) {
-        switchToTab(targetTab);
-        // Clear the session storage
-        sessionStorage.removeItem('open_settings_tab');
-      }
-    }
-  });
-
-  // Handle input visibility toggle
-  document.querySelectorAll('.toggle-visibility').forEach(button => {
-    button.addEventListener('click', () => {
-      const inputId = button.getAttribute('data-for');
-      const input = document.getElementById(inputId);
-      
-      if (input.type === 'password') {
-        input.type = 'text';
-        button.querySelector('i').classList.replace('fa-eye', 'fa-eye-slash');
-      } else {
-        input.type = 'password';
-        button.querySelector('i').classList.replace('fa-eye-slash', 'fa-eye');
-      }
-    });
-  });
-
-  // Load Profile Data
   document.addEventListener('DOMContentLoaded', async () => {
-    // Load API Keys
-    const openaiKey = localStorage.getItem('openai_api_key');
-    const googleKey = localStorage.getItem('google_api_key');
-    if (openaiKey) document.getElementById('openai-api-key').value = openaiKey;
-    if (googleKey) document.getElementById('google-api-key').value = googleKey;
+    console.log('Settings page loaded');
     
-    // Load Preferences
-    const currentTheme = localStorage.getItem('app_theme') || 'light';
-    const themeRadio = document.querySelector(`input[name="theme"][value="${currentTheme}"]`);
-    if (themeRadio) themeRadio.checked = true;
-    
-    const itemsPerPage = localStorage.getItem('items_per_page') || '24';
-    const itemsSelect = document.getElementById('items-per-page');
-    if (itemsSelect) itemsSelect.value = itemsPerPage;
+    // Variables for modal functionality
+    let currentAction = null;
+    let currentActionConfirmCallback = null;
 
+    // Tab Functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabId = button.getAttribute('data-tab');
+        
+        // Remove active class from all buttons
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to current button
+        button.classList.add('active');
+        
+        // Hide all tab panes
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        // Show the selected tab pane
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Load profile data
     try {
-      // Load Profile Data - use async version of getSession
+      // Use the async getSession function
       const session = await getSession();
+      console.log('Loading profile from session:', session);
       
       if (session) {
+        // Set user profile information
         const nameInput = document.getElementById('profile-name');
         const emailInput = document.getElementById('profile-email');
         
-        // Get display name from session or fallback to email username
-        const displayName = session.name || (session.email ? session.email.split('@')[0] : 'N/A');
-        
-        if (nameInput) nameInput.value = displayName;
-        if (emailInput) emailInput.value = session.email || 'N/A';
-      } else {
-        console.warn('Could not load user session for profile.');
-      }
-    } catch (error) {
-      console.error('Error loading user profile:', error);
-    }
-  });
-
-  // Handle API key save with validation
-  document.getElementById('save-api-keys')?.addEventListener('click', async () => {
-    const saveButton = document.getElementById('save-api-keys');
-    const openaiInput = document.getElementById('openai-api-key');
-    const openaiStatus = document.getElementById('openai-validation-status');
-    const googleInput = document.getElementById('google-api-key');
-    
-    const openaiKey = openaiInput.value.trim();
-    const googleKey = googleInput.value.trim();
-    
-    if (!openaiKey) {
-      showWarning('Please enter an OpenAI API Key.');
-      openaiStatus.textContent = '';
-      openaiStatus.className = 'validation-status';
-      return;
-    }
-
-    // Indicate loading/validation
-    saveButton.disabled = true;
-    saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validating...';
-    openaiStatus.className = 'validation-status loading';
-    openaiStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validating key...';
-
-    let isValid = false;
-    try {
-      const response = await fetch('/api/validate-openai-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey: openaiKey }),
-      });
-      
-      const result = await response.json();
-
-      if (response.ok && result.valid) {
-        isValid = true;
-        openaiStatus.className = 'validation-status success';
-        openaiStatus.innerHTML = '<i class="fas fa-check-circle"></i> API Key Validated!';
-      } else {
-        openaiStatus.className = 'validation-status error';
-        openaiStatus.innerHTML = `<i class="fas fa-times-circle"></i> ${result.error || 'Invalid API Key'}`;
-        showError(`OpenAI Key Validation Failed: ${result.error || 'Invalid Key'}`);
-      }
-    } catch (error) {
-      console.error('Validation request failed:', error);
-      openaiStatus.className = 'validation-status error';
-      openaiStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Validation failed. Check console.';
-      showError('API Key validation request failed. Check your connection.');
-    }
-
-    // Reset button state
-    saveButton.disabled = false;
-    saveButton.innerHTML = '<i class="fas fa-save"></i> Save & Validate API Keys';
-
-    // Only save if valid
-    if (isValid) {
-      try {
-        // Save to local storage first (always useful)
-        localStorage.setItem('openai_api_key', openaiKey);
-        if (googleKey) localStorage.setItem('google_api_key', googleKey);
-        localStorage.setItem('api_keys_updated_at', Date.now().toString());
-        
-        // Dispatch custom event
-        const apiKeyEvent = new CustomEvent('apiKeyUpdated', {
-          detail: { openaiKey, timestamp: Date.now() }
-        });
-        window.dispatchEvent(apiKeyEvent);
-        console.log('Dispatched apiKeyUpdated event after successful validation');
-
-        // Save to Supabase user_profiles table if logged in
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session && session.user) {
-            const { error: profileError } = await supabase
-              .from('user_profiles')
-              .update({ 
-                openai_api_key: openaiKey || null,
-                // google_api_key: googleKey || null // Keep google key disabled
-              })
-              .eq('id', session.user.id);
-              
-            if (profileError) {
-              console.warn('Could not save API key to user_profiles:', profileError);
-              // Attempt to insert if update failed (profile might not exist yet)
-              if (profileError.code === 'PGRST116') { // code for no rows updated
-                console.log('No profile found, attempting to insert...');
-                const { error: insertError } = await supabase
-                  .from('user_profiles')
-                  .insert({ 
-                    id: session.user.id, 
-                    openai_api_key: openaiKey || null 
-                  });
-                if (insertError) {
-                  console.error('Could not insert user profile with API key:', insertError);
-                  showError('Failed to save API key to profile.');
-                } else {
-                  console.log('User profile created and API key saved.');
-                  showSuccess('API key validated and saved successfully!');
-                }
-              } else {
-                 showError('Failed to save API key to profile.');
-              }
-            } else {
-              console.log('API key saved to user_profiles table.');
-              showSuccess('API keys validated and saved successfully!');
-            }
-          } else {
-            // User not logged in, only saved locally
-             showSuccess('API key validated and saved locally!');
-          }
-        } catch (supabaseError) {
-          console.warn('Error saving API key to Supabase:', supabaseError);
-           showError('Error saving API key to your account.');
+        if (nameInput && emailInput) {
+          // If we have a display name, use that; otherwise, extract username from email
+          const displayName = session.displayName || (session.email ? session.email.split('@')[0] : '');
+          nameInput.value = displayName;
+          emailInput.value = session.email || '';
         }
-
-      } catch (error) {
-        showError('Failed to save API keys after validation: ' + error.message);
-        openaiStatus.className = 'validation-status error';
-        openaiStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Saved failed after validation.';
+      } else {
+        console.warn('Could not load user session data for profile');
       }
-    }
-  });
-
-  // Clear validation status when input changes
-  document.getElementById('openai-api-key')?.addEventListener('input', () => {
-    const openaiStatus = document.getElementById('openai-validation-status');
-    if (openaiStatus) {
-      openaiStatus.textContent = '';
-      openaiStatus.className = 'validation-status';
-    }
-  });
-
-  // Handle preferences save
-  document.getElementById('save-preferences')?.addEventListener('click', () => {
-    try {
-      const theme = document.querySelector('input[name="theme"]:checked').value;
-      const itemsPerPage = document.getElementById('items-per-page').value;
-      const rememberTheme = document.getElementById('remember-theme').checked;
-      
-      // Save items per page
-      localStorage.setItem('items_per_page', itemsPerPage);
-      
-      // Save theme preference setting
-      localStorage.setItem('remember_theme', rememberTheme.toString());
-      
-      // Save theme only if the user wants to remember it
-      if (rememberTheme) {
-        localStorage.setItem('app_theme', theme);
-      }
-      
-      // Apply theme regardless (it's already applied but this ensures consistency)
-      setTheme(theme, rememberTheme);
-      
-      // Show success notification
-      showSuccess('Preferences saved successfully!');
     } catch (error) {
-      showError('Failed to save preferences: ' + error.message);
+      console.error('Error loading profile:', error);
     }
-  });
-  
-  // Custom confirmation modal functionality
-  const modal = document.getElementById('confirmation-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalMessage = document.getElementById('modal-message');
-  const modalConfirm = document.getElementById('modal-confirm');
-  const modalCancel = document.getElementById('modal-cancel');
-  const modalClose = document.getElementById('modal-close');
-  
-  // Show confirmation modal and return a promise
-  const showConfirmation = (title, message) => {
-    return new Promise((resolve) => {
-      modalTitle.textContent = title;
-      modalMessage.textContent = message;
-      modal.classList.add('active');
-      
-      const handleConfirm = () => {
-        modal.classList.remove('active');
-        modalConfirm.removeEventListener('click', handleConfirm);
-        modalCancel.removeEventListener('click', handleCancel);
-        modalClose.removeEventListener('click', handleCancel);
-        resolve(true);
-      };
-      
-      const handleCancel = () => {
-        modal.classList.remove('active');
-        modalConfirm.removeEventListener('click', handleConfirm);
-        modalCancel.removeEventListener('click', handleCancel);
-        modalClose.removeEventListener('click', handleCancel);
-        resolve(false);
-      };
-      
-      modalConfirm.addEventListener('click', handleConfirm);
-      modalCancel.addEventListener('click', handleCancel);
-      modalClose.addEventListener('click', handleCancel);
-    });
-  };
-  
-  // Handle clearing favorites
-  document.getElementById('clear-favorites')?.addEventListener('click', async () => {
-    const confirmed = await showConfirmation(
-      'Clear Favorites',
-      'Are you sure you want to clear all favorites? This cannot be undone.'
-    );
+
+    // API Key Management
+    const openaiKeyInput = document.getElementById('openai-api-key');
+    const openaiValidationStatus = document.getElementById('openai-validation-status');
+    const googleKeyInput = document.getElementById('google-api-key');
+    const googleValidationStatus = document.getElementById('google-validation-status');
+    const saveApiKeysBtn = document.getElementById('save-api-keys');
     
-    if (confirmed) {
-      try {
-        localStorage.removeItem('favorite_hooks');
-        // Also clear from IndexedDB if available
-        if ('indexedDB' in window) {
-          const request = indexedDB.deleteDatabase('hookVault365DB');
-          request.onsuccess = () => {
-            showSuccess('All favorites have been cleared.');
-          };
-          request.onerror = () => {
-            throw new Error('Failed to clear IndexedDB.');
-          };
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-visibility').forEach(button => {
+      button.addEventListener('click', () => {
+        const inputId = button.getAttribute('data-for');
+        const input = document.getElementById(inputId);
+        const icon = button.querySelector('i');
+        
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.className = 'fas fa-eye-slash';
         } else {
-          showSuccess('All favorites have been cleared.');
+          input.type = 'password';
+          icon.className = 'fas fa-eye';
         }
-      } catch (error) {
-        showError('Failed to clear favorites: ' + error.message);
-      }
-    }
-  });
-  
-  // Handle resetting settings
-  document.getElementById('reset-settings')?.addEventListener('click', async () => {
-    const confirmed = await showConfirmation(
-      'Reset Settings',
-      'Are you sure you want to reset all settings? This will not affect your saved hooks or favorites.'
-    );
-    
-    if (confirmed) {
-      try {
-        // Reset all settings except hooks and favorites
-        localStorage.removeItem('app_theme');
-        localStorage.removeItem('items_per_page');
-        localStorage.removeItem('openai_api_key');
-        localStorage.removeItem('google_api_key');
-        
-        // Reset UI
-        document.querySelector('input[name="theme"][value="light"]').checked = true;
-        document.getElementById('items-per-page').value = '24';
-        document.getElementById('openai-api-key').value = '';
-        document.getElementById('google-api-key').value = '';
-        
-        // Apply default theme
-        setTheme('light');
-        
-        showSuccess('All settings have been reset to defaults.');
-      } catch (error) {
-        showError('Failed to reset settings: ' + error.message);
-      }
-    }
-  });
-
-  // Load the remember theme preference
-  document.addEventListener('DOMContentLoaded', () => {
-    const rememberTheme = localStorage.getItem('remember_theme');
-    if (rememberTheme !== null) {
-      document.getElementById('remember-theme').checked = rememberTheme === 'true';
-    }
-  });
-
-  // Add direct theme switch functionality on radio button change
-  document.querySelectorAll('input[name="theme"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      if (e.target.checked) {
-        const newTheme = e.target.value;
-        const rememberTheme = document.getElementById('remember-theme')?.checked || false;
-        
-        // Apply theme immediately when radio is changed
-        setTheme(newTheme, rememberTheme);
-        
-        // Show temporary notification if not saving
-        if (!rememberTheme) {
-          showSuccess('Theme preview applied. Save preferences to keep this theme.');
-        }
-      }
+      });
     });
+    
+    // OpenAI Model Selection
+    const modelDropdown = document.getElementById('openai-model');
+    const refreshModelsBtn = document.getElementById('refresh-models');
+    const modelInfo = document.getElementById('model-info');
+    let openAIModels = null;
+    
+    // Load saved OpenAI model preference
+    const savedModel = localStorage.getItem('openai_model');
+    
+    // Function to load OpenAI models
+    async function loadOpenAIModels() {
+      // Check if we have an API key
+      const apiKey = openaiKeyInput.value.trim() || localStorage.getItem('openai_api_key');
+      
+      if (!apiKey) {
+        modelDropdown.innerHTML = '<option value="">API Key Required</option>';
+        modelDropdown.disabled = true;
+        modelInfo.textContent = 'Please enter and save your OpenAI API key first.';
+        return;
+      }
+      
+      try {
+        // Show loading state
+        refreshModelsBtn.querySelector('i').classList.add('fa-spin');
+        modelDropdown.disabled = true;
+        modelDropdown.innerHTML = '<option value="">Loading models...</option>';
+        modelInfo.textContent = 'Fetching available models...';
+        
+        // Fetch models from our API
+        const response = await fetch('/api/list-openai-models', {
+          method: 'GET',
+          headers: {
+            'x-openai-key': apiKey
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
+        openAIModels = data.models;
+        
+        // Populate dropdown with models
+        let optionsHTML = '';
+        
+        // Add recommended models group
+        optionsHTML += '<optgroup label="Recommended Models">';
+        openAIModels.recommended.forEach(modelId => {
+          optionsHTML += `<option value="${modelId}" ${savedModel === modelId ? 'selected' : ''}>${modelId}</option>`;
+        });
+        optionsHTML += '</optgroup>';
+        
+        // Add GPT-3.5 models group
+        optionsHTML += '<optgroup label="GPT-3.5 Models">';
+        openAIModels.gpt35.forEach(model => {
+          // Skip if already in recommended
+          if (!openAIModels.recommended.includes(model.id)) {
+            optionsHTML += `<option value="${model.id}" ${savedModel === model.id ? 'selected' : ''}>${model.id}</option>`;
+          }
+        });
+        optionsHTML += '</optgroup>';
+        
+        // Add GPT-4 models group
+        optionsHTML += '<optgroup label="GPT-4 Models">';
+        openAIModels.gpt4.forEach(model => {
+          // Skip if already in recommended
+          if (!openAIModels.recommended.includes(model.id)) {
+            optionsHTML += `<option value="${model.id}" ${savedModel === model.id ? 'selected' : ''}>${model.id}</option>`;
+          }
+        });
+        optionsHTML += '</optgroup>';
+        
+        modelDropdown.innerHTML = optionsHTML;
+        modelDropdown.disabled = false;
+        
+        // If no saved model but we have models, select first recommended
+        if (!savedModel && openAIModels.recommended.length > 0) {
+          modelDropdown.value = openAIModels.recommended[0];
+        }
+        
+        updateModelInfo();
+        
+      } catch (error) {
+        console.error('Error loading OpenAI models:', error);
+        modelDropdown.innerHTML = '<option value="">Error loading models</option>';
+        modelInfo.textContent = `Error: ${error.message}`;
+      } finally {
+        // Remove loading state
+        refreshModelsBtn.querySelector('i').classList.remove('fa-spin');
+      }
+    }
+    
+    // Update model info based on selection
+    function updateModelInfo() {
+      const selectedModel = modelDropdown.value;
+      
+      if (selectedModel.includes('gpt-4')) {
+        modelInfo.textContent = 'GPT-4 models are more capable but more expensive. Check your OpenAI account for pricing.';
+      } else if (selectedModel.includes('gpt-3.5')) {
+        modelInfo.textContent = 'GPT-3.5 models offer a good balance between capability and cost.';
+      } else {
+        modelInfo.textContent = '';
+      }
+    }
+    
+    // Listen for model selection changes
+    modelDropdown.addEventListener('change', () => {
+      updateModelInfo();
+    });
+    
+    // Refresh models button
+    refreshModelsBtn.addEventListener('click', loadOpenAIModels);
+    
+    // Previous code for Save API Keys
+    saveApiKeysBtn.addEventListener('click', async () => {
+      console.log('Save API keys button clicked');
+      
+      const openaiKey = openaiKeyInput.value.trim();
+      const googleKey = googleKeyInput.value.trim();
+      
+      // Update UI to show validation in progress
+      if (openaiKey) {
+        openaiValidationStatus.textContent = 'Validating...';
+        openaiValidationStatus.className = 'validation-status validating';
+        
+        try {
+          // Validate OpenAI key by trying to list models
+          const response = await fetch('/api/list-openai-models', {
+            method: 'GET',
+            headers: {
+              'x-openai-key': openaiKey
+            }
+          });
+          
+          const data = await response.json();
+          
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          
+          // Key is valid
+          openaiValidationStatus.textContent = 'API key valid!';
+          openaiValidationStatus.className = 'validation-status valid';
+          
+          // Save to localStorage
+          localStorage.setItem('openai_api_key', openaiKey);
+          
+          // Fetch and populate models
+          await loadOpenAIModels();
+          
+        } catch (error) {
+          console.error('OpenAI API key validation error:', error);
+          openaiValidationStatus.textContent = `Invalid: ${error.message}`;
+          openaiValidationStatus.className = 'validation-status invalid';
+        }
+      } else {
+        // Clear validation status if empty
+        openaiValidationStatus.textContent = '';
+        openaiValidationStatus.className = 'validation-status';
+        
+        // Remove from localStorage if existed
+        if (localStorage.getItem('openai_api_key')) {
+          localStorage.removeItem('openai_api_key');
+        }
+      }
+      
+      // Google validation would go here when implemented
+      
+      // Show success message
+      showToast('API settings saved successfully!');
+    });
+    
+    // Save the selected OpenAI model
+    async function saveSelectedModel() {
+      const selectedModel = modelDropdown.value;
+      
+      if (selectedModel) {
+        localStorage.setItem('openai_model', selectedModel);
+        showToast('AI model preference saved!');
+      }
+    }
+    
+    // Add event listener to save model when changed
+    modelDropdown.addEventListener('change', saveSelectedModel);
+    
+    // Load saved OpenAI API key and init model dropdown
+    const savedOpenAIKey = localStorage.getItem('openai_api_key');
+    if (savedOpenAIKey) {
+      openaiKeyInput.value = savedOpenAIKey;
+      loadOpenAIModels();
+    }
+
+    // Other existing code for preferences, theme selection, etc.
+    
+    // ... existing code ...
   });
 </script> 
